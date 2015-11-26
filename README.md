@@ -6,16 +6,91 @@ This project is a experiment for testing our method to amend word vectors obtain
 
 ### Chinese Introduction
 
-¶¯»ú£ºÄ¿Ç°ÖÚ¶àÉñ¾­ÓïÑÔÄ£ĞÍÌá¹©µÄ´ÊÏòÁ¿£¬²»ÄÜºÜºÃµÄ·´Ó³Çé¸ĞÏàËÆĞÔ£¬ÒòÎªÉÏÏÂÎÄÏàËÆµÄ´ÊÓï²¢Ò»¶¨¾ßÓĞÏàËÆµÄÇé¸ĞÀà±ğ¡£´«Í³µÄÇé¸Ğ´ÊµäÎªÇé¸Ğ´ÊÌá¹©ÁËÖØÒªµÄĞÅÏ¢£¬´ÊÏòÁ¿ÑµÁ·¹ı³Ì²¢Ã»ÓĞÈÚÈë´«Í³´ÊµäĞÅÏ¢£¬ÎÒÃÇÏ£Íû½èÖúÇé¸Ğ´ÊµäÀ´ÓÅ»¯ÏÖÓĞ´ÊÏòÁ¿¡£
+åŠ¨æœºï¼šç›®å‰ä¼—å¤šç¥ç»è¯­è¨€æ¨¡å‹æä¾›çš„è¯å‘é‡ï¼Œä¸èƒ½å¾ˆå¥½çš„åæ˜ æƒ…æ„Ÿç›¸ä¼¼æ€§ï¼Œå› ä¸ºä¸Šä¸‹æ–‡ç›¸ä¼¼çš„è¯è¯­å¹¶ä¸€å®šå…·æœ‰ç›¸ä¼¼çš„æƒ…æ„Ÿç±»åˆ«ã€‚ä¼ ç»Ÿçš„æƒ…æ„Ÿè¯å…¸ä¸ºæƒ…æ„Ÿè¯æä¾›äº†é‡è¦çš„ä¿¡æ¯ï¼Œè¯å‘é‡è®­ç»ƒè¿‡ç¨‹å¹¶æ²¡æœ‰èå…¥ä¼ ç»Ÿè¯å…¸ä¿¡æ¯ï¼Œæˆ‘ä»¬å¸Œæœ›å€ŸåŠ©æƒ…æ„Ÿè¯å…¸æ¥ä¼˜åŒ–ç°æœ‰è¯å‘é‡ã€‚
 
-·½·¨£º»ù±¾Ë¼ÏëÊÇ£¬ÀûÓÃÇé¸Ğ´Êµä£¨ÀïÃæÓĞÕıÏò´Ê¡¢¸ºÏò´ÊÁĞ±í£©£¬ÈÃÕıÏò´Ê¾¡Á¿¿¿½üÕıÏò´ÊÖĞĞÄ£¬²¢Ô¶Àë¸ºÏò´ÊÖĞĞÄ£¬ÈÃ¸ºÏò´Ê¾¡Á¿¿¿½ü¸ºÏò´ÊÖĞĞÄ£¬²¢Ô¶ÀëÕıÏò´ÊÖĞĞÄ£¬Í¬Ê±²»ÒªÆ«ÀëÔ­Ê¼ÏòÁ¿Ì«Ô¶¡£¾ßÌå¶øÑÔ£¬Ä¿±êº¯ÊıÎª£º
+æ–¹æ³•ï¼šåŸºæœ¬æ€æƒ³æ˜¯ï¼Œåˆ©ç”¨æƒ…æ„Ÿè¯å…¸ï¼ˆé‡Œé¢æœ‰æ­£å‘è¯ã€è´Ÿå‘è¯åˆ—è¡¨ï¼‰ï¼Œè®©æ­£å‘è¯å°½é‡é è¿‘æ­£å‘è¯ä¸­å¿ƒï¼Œå¹¶è¿œç¦»è´Ÿå‘è¯ä¸­å¿ƒï¼Œè®©è´Ÿå‘è¯å°½é‡é è¿‘è´Ÿå‘è¯ä¸­å¿ƒï¼Œå¹¶è¿œç¦»æ­£å‘è¯ä¸­å¿ƒï¼ŒåŒæ—¶ä¸è¦åç¦»åŸå§‹å‘é‡å¤ªè¿œã€‚å…·ä½“è€Œè¨€ï¼Œç›®æ ‡å‡½æ•°ä¸ºï¼š
 
 <p align="center"> <img src="./images/formula_1.png" height="180" /> </p>
 
-Ä¿±êÊÇ×îĞ¡»¯Ä¿±êº¯Êı*J(¦¨)*£¬A²¿·ÖÄ¿µÄÊÇÈÃÕıÏò´Ê¾¡Á¿¿¿½üÕıÏò´ÊÖĞĞÄ£¬²¢Ô¶Àë¸ºÏò´ÊÖĞĞÄ£»B²¿·ÖÄ¿µÄÊÇÈÃ¸ºÏò´Ê¾¡Á¿¿¿½ü¸ºÏò´ÊÖĞĞÄ£¬²¢Ô¶ÀëÕıÏò´ÊÖĞĞÄ£»C²¿·ÖÄ¿µÄÊÇÓÅ»¯ºóµÄÏòÁ¿²»ÒªÆ«ÀëÔ­Ê¼ÏòÁ¿Ì«Ô¶¡£P¡¢Q·Ö±ğÊÇÕıÏòºÍ¸ºÏòÇé¸Ğ´Ê¶ÔÓ¦µÄindex¡£¹«Ê½ÖĞA¡¢B¡¢CÖ®¼äÎªÏà³Ë£¬Ò²¿ÉÒÔÊÇÏà¼Ó£¬»¹Ğè½øÒ»²½È·¶¨¡£
+ç›®æ ‡æ˜¯æœ€å°åŒ–ç›®æ ‡å‡½æ•°*J(Î˜)*ï¼ŒAéƒ¨åˆ†ç›®çš„æ˜¯è®©æ­£å‘è¯å°½é‡é è¿‘æ­£å‘è¯ä¸­å¿ƒï¼Œå¹¶è¿œç¦»è´Ÿå‘è¯ä¸­å¿ƒï¼›Béƒ¨åˆ†ç›®çš„æ˜¯è®©è´Ÿå‘è¯å°½é‡é è¿‘è´Ÿå‘è¯ä¸­å¿ƒï¼Œå¹¶è¿œç¦»æ­£å‘è¯ä¸­å¿ƒï¼›Céƒ¨åˆ†ç›®çš„æ˜¯ä¼˜åŒ–åçš„å‘é‡ä¸è¦åç¦»åŸå§‹å‘é‡å¤ªè¿œã€‚Pã€Qåˆ†åˆ«æ˜¯æ­£å‘å’Œè´Ÿå‘æƒ…æ„Ÿè¯å¯¹åº”çš„indexã€‚å…¬å¼ä¸­Aã€Bã€Cä¹‹é—´ä¸ºç›¸ä¹˜ï¼Œä¹Ÿå¯ä»¥æ˜¯ç›¸åŠ ï¼Œè¿˜éœ€è¿›ä¸€æ­¥ç¡®å®šã€‚
 
-ÈçºÎÇó½â×îÓÅ½â£ºÊ¹ÓÃiterative updating method¡£
+å¦‚ä½•æ±‚è§£æœ€ä¼˜è§£ï¼šä½¿ç”¨iterative updating methodã€‚
 
-ÊµÑéÂÛÖ¤£ºµ¥´ÊVAÔ¤²â¡¢twitterÇé¸Ğ·ÖÀàÁ½¸öÊµÑé¡£
+å®éªŒè®ºè¯ï¼šå•è¯VAé¢„æµ‹ã€twitteræƒ…æ„Ÿåˆ†ç±»ä¸¤ä¸ªå®éªŒã€‚
 
-### Coding
+### Semantic Similar Words May Have Different Sentiment Polarity
+
+Word vectors obtained from neural language models often suffer from the dilemma that semantic similar words may have different sentiment polarity, as these models are based on the assumption that words occurring in similar context tend to have similar word vectors. 
+
+
+### Paper Reviews
+
+|References|Emotion Model|Level|Lexicon|Features|Method|Word Embeddings|
+|------|------|------|------|------|------|------|
+|[Kim 2014]|Categorical|Sentence|None|None|CNN|word2vec|
+|[Kalchbrenner 2014]|Categorical|Sentence|None|None|DCNN|randomly initialised|
+|[Wang 2015]|Categorical|Sentence|None|None|CNN|Senna, GloVe, Word2Vec|
+|[Johnson 2015]|Categorical|Sentence|None|None|seq-CNN, bow-CNN|one-hot representation|
+|[dos Santos 2014]|Categorical|Sentence|None|None|CharSCNN|Word-Level & Character-Level vectors|
+|[Tang 2014]|Categorical|Sentence|None|SSWE & hand-crafted features|SVM|SSWE|
+|[Yin 2015]|Categorical|Sentence|None|None|MVCNN|HLBLã€Huangã€GloVeã€SENNAã€word2vec|
+|[Ruppenhofer 2014]|Dimensional|Word|Warriner, SentiStrength, SoCAL|modifiers, star ratings or lexicon| Corpus-based & lexical-based methods|None|
+|[Staiano 2014]|Dimensional|Word, Sentence|Wordnet, DepecheMood|Lexicon|Regression|None|
+|[Xu 2015]|Dimensional|Sentence|Opinion Lexicon, Afinn, MPQA, SentiWordnet|Lexicon, n-grams|decision tree regression|None|
+|[Van Hee 2015]|Dimensional|Sentence|WordNet|lexical and syntactic features|regression|None|
+|[Gimenez 2015]|Dimensional|Sentence|Pattern, Afinn-111, Jeffrey, NRC, SentiWordNet|lexicon, ngrams, negation, syntactic|linear kernel SVR|None|
+|[FarÄ±as 2015]|Dimensional|Sentence|AFINN, ANEW, DAL, HL, GI, SWN, SN, LIWC, NRC|Lexical & Structural Features|Linear Regression|None|
+|[Gupta 2015]|Dimensional|Sentence|None|bags of words, bags of character 3-grams, binary features|Autoencoders, regression|None|
+|[McGillion 2015]|Dimensional|Sentence|None|n-grams, uppercase, punctuations & word embeddings|stacking systems: regression|word2vec|
+|[Karanasou 2015]|Dimensional|Sentence|None|syntactical and morphological features|SVM Classification|None|
+|[Han 2015]|Dimensional|Sentence|Liu, MPQA, Mohammad|formal text features, tweet-specific features, discourse features, sentiment distribution among topics & word embedding|SVM classifier|SSWE|
+|[Nguyen 2015]|Dimensional|Sentence|None|term features and emotion patterns|a decision tree based classifier|None|
+|[Dragoni 2015]|Dimensional|Sentence|None|None|IR-based|None|
+
+### References
+___
+**CNN**
+
+[Kim 2014] Kim, Y. (n.d.). Convolutional Neural Networks for Sentence Classification. Proceedings of the 2014 Conference on Empirical Methods in Natural Language Processing (EMNLP).
+
+[Kalchbrenner 2014] Kalchbrenner, N., Grefenstette, E., & Blunsom, P. (n.d.). A Convolutional Neural Network for Modelling Sentences. Proceedings of the 52nd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers).
+
+[Wang 2015] Wang, P., Xu, J., Xu, B., Liu, C. L., Zhang, H., Wang, F., & Hao, H. (2015). Semantic Clustering and Convolutional Neural Network for Short Text Categorization. In Proceedings of the 53rd Annual Meeting of the Association for Computational Linguistics and the 7th International Joint Conference on Natural Language Processing (Vol. 2, pp. 352-357).
+
+[Johnson 2015] Johnson, R., & Zhang, T. (n.d.). Effective Use of Word Order for Text Categorization with Convolutional Neural Networks. Proceedings of the 2015 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies.
+
+[dos Santos 2014] dos Santos, C. N., & Gatti, M. (2014). Deep convolutional neural networks for sentiment analysis of short texts. In Proceedings of the 25th International Conference on Computational Linguistics (COLING), Dublin, Ireland.
+
+[Tang 2014] Tang, D., Wei, F., Qin, B., Liu, T., & Zhou, M. (2014, August). Coooolll: A deep learning system for twitter sentiment classification. In Proceedings of the 8th International Workshop on Semantic Evaluation (SemEval 2014) (pp. 208-212).
+
+[Yin 2015] Wenpeng Yin, Hinrich SchÃ¼tze. Multichannel Variable-Size Convolution for Sentence Classification. The 19th SIGNLL Conference on Computational Natural Language Learning (CoNLL'2015, long paper). July 30-31, Peking, China.
+___
+**SemEval-2015 Task 11**
+
+[Ruppenhofer 2014] Josef Ruppenhofer, Michael Wiegand, Jasper Brandes: Comparing methods for deriving intensity scores for adjectives. EACL 2014: 117-122.
+
+[Staiano 2014] Jacopo Staiano, Marco Guerini: DepecheMood: a Lexicon for Emotion Analysis from Crowd-Annotated News. CoRR abs/1405.1605 (2014).
+
+[Xu 2015] Xu, Hongzhi and Santus, Enrico and Laszlo, Anna and Huang, Chu-Ren 2015, LLT-PolyU: Identifying Sentiment Intensity in Ironic Tweets, In Proceedings of the 9th International Workshop on Semantic Evaluation (SemEval 2015), Association for Computational Linguistics, pages 673â€“678, Denver, Colorado.
+___
+
+**SemEval-2015 Task 11 ç¬¬å››ååŠå…¶å**
+
+[Van Hee 2015] Van Hee, C., Lefever, E., & Hoste, V. (2015). LT3: sentiment analysis of figurative tweets: piece of cake# NotReally. In SemEval: 9th International Workshop on Semantic Evaluations at Naacl 2015 (pp. 684-688). Association for Computational Linguistics.
+
+[Gimenez 2015] Mayte Gimenez, Ferran Pla, LluÄ±s-F. Hurtado. ELiRF: A Support Vector Machine Approach for Sentiment Analysis Tasks in Twitter at SemEval-2015. SemEval-2015.
+
+[FarÄ±as 2015] FarÄ±as, D. I. H., Sulis, E., Patti, V., Ruffo, G., & Bosco, C. ValenTo: Sentiment Analysis of Figurative Language Tweets with Irony and Sarcasm.
+
+[Gupta 2015] Gupta, P., & GÃ³mez, J. A. PRHLT: Combination of Deep Autoencoders with Classification and Regression Techniques for SemEval-2015 Task 11.
+
+[McGillion 2015] McGillion, S., Martinez Alonso, H., & Plank, B. CPH: Sentiment analysis of Figurative Language on Twitter# easypeasy# not.
+
+[Karanasou 2015] Karanasou, M., Doulkeridis, C., & Halkidi, M. DsUniPi: An SVM-based Approach for Sentiment Analysis of Figurative Language on Twitter.
+
+[Han 2015] Han, X., Li, B., Ma, J., Zhang, Y., Ou, G., Wang, T., & Wong, K. F. UIR-PKU: Twitter-OpinMiner System for Sentiment Analysis in Twitter at SemEval 2015.
+
+[Nguyen 2015] Nguyen, H. L., Nguyen, T. D., Hwang, D., & Jung, J. J. KELabTeam: A Statistical Approach on Figurative Language Sentiment Analysis in Twitter.
+
+[Dragoni 2015] Dragoni, M., & Povo, T. SHELLFBK: An Information Retrieval-based System For Multi-Domain Sentiment Analysis.
+___
