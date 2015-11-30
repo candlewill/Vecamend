@@ -56,3 +56,9 @@ word2vec和Bing-Liu's lexicon共同出现的词汇数
 |分类器|准确率|
 |-----|-----|
 |Logistic Regression|95.182%|
+
+### 优化后分类性能
+
+目标函数：
+
+使用efficient iterative updating method.
