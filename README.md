@@ -51,7 +51,7 @@ word2vec和Bing-Liu's lexicon共同出现的词汇数
 
 ### 优化前分类性能
 
-对上述1857+4444 = 6301个词训练分类器，观察分类性能，cross-validation with 0.8 training data and 0.2 test data for 10 times, we use the average performance of 10 times. The result is as follows.
+对上述1857+4444 = 6301个词训练分类器，观察分类性能，cross-validation with 0.8 training data and 0.2 test data for 20 times, we use the average performance of 20 times. The result is as follows.
 
 |分类器|准确率|
 |-----|-----|
