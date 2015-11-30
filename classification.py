@@ -5,8 +5,8 @@ from sklearn.cross_validation import ShuffleSplit
 from sklearn.linear_model import LogisticRegression
 
 def build_data():
-    positive_data = load_pickle('./tmp/common_positive_words.p')
-    negative_data = load_pickle('./tmp/common_negative_words.p')
+    positive_data = load_pickle('./tmp/amended_pos.p')
+    negative_data = load_pickle('./tmp/amended_neg.p')
     X, Y = [], []
     for pos in positive_data.keys():
         X.append(positive_data[pos])
