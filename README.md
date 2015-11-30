@@ -67,8 +67,14 @@ word2vec和Bing-Liu's lexicon共同出现的词汇数
 
 求偏导数等于0时参数的取值，当i∈P时，
 
-<p align="center"> <img src="./images/formula_2.1.png" height="60" /> </p>
+<p align="center"> <img src="./images/formula_2.1.png" height="50" /> </p>
 
 当i∈Q时，
 
-<p align="center"> <img src="./images/formula_3.png" height="60" /> </p>
+<p align="center"> <img src="./images/formula_3.png" height="50" /> </p>
+
+其中
+
+<p align="center"> <img src="./images/formula_4.png" height="100" /> </p>
+
+表示正向词向量中心，和负向词向量中心
