@@ -84,3 +84,19 @@ word2vec和Bing-Liu's lexicon共同出现的词汇数
 <p align="center"> <img src="./images/updating.png" height="300" /> </p>
 
 Convergence条件是所有词向量和上一步骤中词向量之间的欧拉距离小于0.01。
+
+优化后，分类准确率为99.99%.
+
+### Experiment 2: VA_prediction
+
+We train a regression model on the amened word vectors. Anew lexicon is used, which contains words tagged with valence and arousal values manually. 
+
+对word2vec pre-trained word vectors而言，有两个词没有出现，glamour和skijump，ANEW中其余1031个词都有出现，因此我们直接去掉这两个词。只使用1031个词，仍然cross-validation，0.2 for test and 0.8 for training. 一共执行20词，观察MSE、mae、spearman correlation coefficient metrics。
+
+**Experiemnt Result**
+
+原始词向量实验结果
+
+|词向量|MAE|MSE|Pearson|
+|-----|-----|-----|-----|
+|word2vec|0|0|0|
