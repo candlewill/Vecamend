@@ -22,3 +22,29 @@ This project is a experiment for testing our method to amend word vectors obtain
 
 Word vectors obtained from neural language models often suffer from the dilemma that semantic similar words may have different sentiment polarity, as these models are based on the assumption that words occurring in similar context tend to have similar word vectors. 
 
+### Lexicon
+
+可以使用的词典很多，主要包括以下这些。
+
+##### 1. Bing-Liu's Lexicon
+
+From: https://www.cs.uic.edu/~liub/FBS/sentiment-analysis.html#lexicon
+
+This lexicon contains a list of positive and negative sentiment words, including 4783 negative words and 2006 positive words. 这些词汇可能有错误拼写，因为他们是从social media上自动收集得到的。 
+
+### Word vector representations
+
+词向量word2cec, GloVe等等
+
+##### 1. Word2vec
+
+The pre-trained word vectors are trained on 100 billion words of Google news dataset with 300 dimension.
+
+### 词向量和情感词典共同出现的词汇量
+
+word2vec和Bing-Liu's lexicon共同出现的词汇数
+
+|词向量|Liu's positive words|Liu's negative words|
+|----------|----------|----------|
+|word2vec|25|23|
+|GloVe|0|0|
