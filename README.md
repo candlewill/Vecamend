@@ -82,3 +82,5 @@ word2vec和Bing-Liu's lexicon共同出现的词汇数
 更新算法：
 
 <p align="center"> <img src="./images/updating.png" height="300" /> </p>
+
+Convergence条件是所有词向量和上一步骤中词向量之间的欧拉距离小于0.01。
