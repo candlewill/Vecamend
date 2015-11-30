@@ -46,5 +46,13 @@ word2vec和Bing-Liu's lexicon共同出现的词汇数
 
 |词向量|Liu's positive words|Liu's negative words|
 |----------|----------|----------|
-|word2vec|1857|4444|
+|word2vec|1857 (92.57%)|4444 (92.91%)|
 |GloVe|0|0|
+
+### 优化前分类性能
+
+对上述1857+4444 = 6301个词训练分类器，观察分类性能，cross-validation with 0.8 training data and 0.2 test data for 10 times, we use the average performance of 10 times. The result is as follows.
+
+|分类器|准确率|
+|-----|-----|
+|Logistic Regression|95.182%|
