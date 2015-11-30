@@ -61,4 +61,14 @@ word2vec和Bing-Liu's lexicon共同出现的词汇数
 
 目标函数：
 
+<p align="center"> <img src="./images/formula_2.png" height="180" /> </p>
+
 使用efficient iterative updating method.
+
+求偏导数等于0时参数的取值，当i∈P时，
+
+<p align="center"> <img src="./images/formula_2.1.png" height="75" /> </p>
+
+当i∈Q时，
+
+<p align="center"> <img src="./images/formula_3.png" height="74" /> </p>
