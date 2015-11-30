@@ -46,5 +46,5 @@ word2vec和Bing-Liu's lexicon共同出现的词汇数
 
 |词向量|Liu's positive words|Liu's negative words|
 |----------|----------|----------|
-|word2vec|25|23|
+|word2vec|1857|4444|
 |GloVe|0|0|
