@@ -78,3 +78,7 @@ word2vec和Bing-Liu's lexicon共同出现的词汇数
 <p align="center"> <img src="./images/formula_4.png" height="100" /> </p>
 
 表示正向词向量中心，和负向词向量中心
+
+更新算法：
+
+<p align="center"> <img src="./images/updating.png" height="300" /> </p>
