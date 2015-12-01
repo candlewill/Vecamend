@@ -31,6 +31,25 @@ def build_ori_anew_vectors(words):
     dump_picle(vecs, filename)
     return vecs
 
+def build_amended_anew_vectors(words):
+    filename = './tmp/amended_anew_vectors.p'
+    if os.path.isfile(filename):
+        return load_pickle(filename)
+    model = load_embeddings('google_news', '/home/hs/Data/Word_Embeddings/google_news.bin')
+    amended_pos = load_pickle('./tmp/amended_pos.p')
+    amended_neg = load_pickle('./tmp/amended_neg.p')
+    vecs = []
+    for w in words:
+        vec = amended_neg.get(w)
+        if vec is None:
+            vec = amended_pos.get(w)
+        if vec is None:
+            vec = model[w]
+        vecs.append(vec)
+    vecs = np.array(vecs)
+    dump_picle(vecs, filename)
+    return vecs
+
 def regression(X, Y):
     nub_iter = 1
     ss = ShuffleSplit(X.shape[0], n_iter=nub_iter, test_size=0.2, indices=True, random_state=0)
@@ -57,7 +76,7 @@ def regression(X, Y):
             Pearson_r = pearsonr(np.array(true), np.array(pred))
 
             decimal = 4
-            print('MAE: %s, MSE: %s, Pearson: %s.' % (round(MAE, decimal), round(MSE, decimal), round(Pearson_r[0], decimal)))
+            print('|%s|%s|%s|' % (round(MAE, decimal), round(MSE, decimal), round(Pearson_r[0], decimal)))
 
 if __name__=='__main__':
     words, valence, arousal = load_anew('./resources/Lexicon/ANEW.txt')
@@ -72,7 +91,7 @@ if __name__=='__main__':
         arousal.pop(i)
     # for i,j,k in zip(words, valence, arousal):
     #     print(i,j,k)
-    vecs = build_ori_anew_vectors(words)
+    vecs = build_amended_anew_vectors(words)
     print(vecs.shape)
     regression(vecs, np.array(arousal))
 

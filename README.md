@@ -116,3 +116,27 @@ word2vec -> Arousal
 |bayesian regression|0.5976|**0.5617**|0.6881|
 |svr|**0.5859**|0.5665|**0.6894**|
 |knn reg|0.6309|0.6501|0.6343|
+
+使用优化之后的词向量实验结果
+
+对于没有出现在优化后词向量中的单词，其词向量仍使用原始词向量
+
+word2vec -> Valence
+
+|回归方法|MAE|MSE|Pearson|
+|-----|-----|-----|-----|
+|ordinary least squares|0.855|1.2694|0.8364|
+|ridge regression|0.7319|0.9749|0.8799|
+|bayesian regression|0.7258|0.9631|0.8797|
+|svr|0.729|0.992|0.8754|
+|knn reg|0.8112|1.2938|0.8451|
+
+word2vec -> Arousal
+
+|回归方法|MAE|MSE|Pearson|
+|-----|-----|-----|-----|
+|ordinary least squares|0.7292|0.8527|0.5948|
+|ridge regression|0.6157|0.5853|0.6711|
+|bayesian regression|0.6211|0.5944|0.6671|
+|svr|0.6142|0.608|0.6599|
+|knn reg|0.6879|0.7328|0.5911|
