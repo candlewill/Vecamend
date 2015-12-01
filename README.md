@@ -83,7 +83,7 @@ word2vec和Bing-Liu's lexicon共同出现的词汇数
 
 <p align="center"> <img src="./images/updating.png" height="300" /> </p>
 
-Convergence条件是所有词向量和上一步骤中词向量之间的欧拉距离小于0.01。
+Convergence条件是cost function变化很小。
 
 优化后，分类准确率为99.99%.
 
@@ -96,6 +96,18 @@ We train a regression model on the amened word vectors. Anew lexicon is used, wh
 **Experiemnt Result**
 
 原始词向量实验结果
+
+word2vec -> Valence
+
+|回归方法|MAE|MSE|Pearson|
+|-----|-----|-----|-----|
+|ordinary least squares|0|0|0|
+|ridge regression|0|0|0|
+|bayesian regression|0|0|0|
+|svr|0|0|0|
+|knn reg|0|0|0|
+
+Arousal
 
 |词向量|MAE|MSE|Pearson|
 |-----|-----|-----|-----|
