@@ -142,3 +142,12 @@ word2vec -> Arousal
 |knn reg|0.6879|0.7328|0.5911|
 
 (注： 以上实验参数是， alpha, beta, gamma = 1, 0.3, 1)
+
+### Experiment 3: Sentiment classification
+
+This experiment uses the DAN model to classify sentence into binary and fine-grained sentiment labels. The dataset we used includes SST (Socher, 2013) and IMDB movie review dataset (Maas, 2011).
+
+##### Dataset
+
+1. Stanford Sentiment Treebank (SST)
+
