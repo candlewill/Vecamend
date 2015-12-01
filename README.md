@@ -140,3 +140,5 @@ word2vec -> Arousal
 |bayesian regression|0.6211|0.5944|0.6671|
 |svr|0.6142|0.608|0.6599|
 |knn reg|0.6879|0.7328|0.5911|
+
+(注： 以上实验参数是， alpha, beta, gamma = 1, 0.3, 1)
