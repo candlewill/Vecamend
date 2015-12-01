@@ -56,7 +56,8 @@ def regression(X, Y):
             MSE = mean_squared_error(np.array(true), np.array(pred))
             Pearson_r = pearsonr(np.array(true), np.array(pred))
 
-            print('MAE: %s, MSE: %s, Pearson: %s.' % (MAE, MSE, Pearson_r))
+            decimal = 4
+            print('MAE: %s, MSE: %s, Pearson: %s.' % (round(MAE, decimal), round(MSE, decimal), round(Pearson_r[0], decimal)))
 
 if __name__=='__main__':
     words, valence, arousal = load_anew('./resources/Lexicon/ANEW.txt')

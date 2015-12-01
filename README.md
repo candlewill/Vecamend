@@ -101,11 +101,11 @@ word2vec -> Valence
 
 |回归方法|MAE|MSE|Pearson|
 |-----|-----|-----|-----|
-|ordinary least squares|0|0|0|
-|ridge regression|0|0|0|
-|bayesian regression|0|0|0|
-|svr|0|0|0|
-|knn reg|0|0|0|
+|ordinary least squares|0.9123|1.375|0.8232|
+|ridge regression|0.8091|1.1044|0.8607|
+|bayesian regression|0.8097|1.1064|0.8579|
+|svr|0.825|1.1453|0.8533|
+|knn reg|0.865|1.2714|0.8339|
 
 Arousal
 
