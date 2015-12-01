@@ -74,5 +74,5 @@ if __name__=='__main__':
     #     print(i,j,k)
     vecs = build_ori_anew_vectors(words)
     print(vecs.shape)
-    regression(vecs, np.array(valence))
+    regression(vecs, np.array(arousal))
 

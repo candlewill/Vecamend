@@ -107,8 +107,12 @@ word2vec -> Valence
 |svr|0.825|1.1453|0.8533|
 |knn reg|0.865|1.2714|0.8339|
 
-Arousal
+word2vec -> Arousal
 
-|词向量|MAE|MSE|Pearson|
+|回归方法|MAE|MSE|Pearson|
 |-----|-----|-----|-----|
-|word2vec|0|0|0|
+|ordinary least squares|0.7132|0.7828|0.6136|
+|ridge regression|0.598|0.5624|0.6877|
+|bayesian regression|0.5976|**0.5617**|0.6881|
+|svr|**0.5859**|0.5665|**0.6894**|
+|knn reg|0.6309|0.6501|0.6343|
