@@ -101,7 +101,7 @@ sentence_index	sentence
 100	While McFarlane 's animation lifts the film firmly above the level of other coming-of-age films ... it 's also so jarring that it 's hard to get back into the boys ' story .
 101	If nothing else , this movie introduces a promising , unusual kind of psychological horror .
 102	In a normal screen process , these bromides would be barely enough to sustain an interstitial program on the Discovery Channel .
-103	But in Imax 3-D , the clichÃ©s disappear into the vertiginous perspectives opened up by the photography .
+103	But in Imax 3-D , the cliches disappear into the vertiginous perspectives opened up by the photography .
 104	Writer-director Burger imaginatively fans the embers of a dormant national grief and curiosity that has calcified into chronic cynicism and fear .
 105	... a roller-coaster ride of a movie
 106	I enjoyed Time of Favor while I was watching it , but I was surprised at how quickly it faded from my memory .
@@ -255,7 +255,7 @@ sentence_index	sentence
 254	The kooky yet shadowy vision Clooney sustains throughout is daring , inventive and impressive .
 255	A triumph of art direction over narrative , but what art direction !
 256	Behan himself knew how to spin a tale and one ca n't help but think he 'd appreciate this attempt to turn his life into art .
-257	JirÃ­ Hubac 's script is a gem .
+257	Jiri Hubac 's script is a gem .
 258	His characters are engaging , intimate and the dialogue is realistic and greatly moving .
 259	The scope of the Silberstein family is large and we grow attached to their lives , full of strength , warmth and vitality . .
 260	Moore 's complex and important film is also , believe it or not , immensely entertaining , a David and Goliath story that 's still very much playing itself out .
@@ -291,7 +291,7 @@ sentence_index	sentence
 290	It 's solid and affecting and exactly as thought-provoking as it should be .
 291	This is such a dazzlingly self-assured directorial debut that it 's hard to know what to praise first .
 292	Parker holds true to Wilde 's own vision of a pure comedy with absolutely no meaning , and no desire to be anything but a polished , sophisticated entertainment that is in love with its own cleverness .
-293	MÃ¼nch 's genuine insight makes the film 's occasional overindulgence forgivable .
+293	Munch 's genuine insight makes the film 's occasional overindulgence forgivable .
 294	Thankfully , the film , which skirts that rapidly deteriorating line between fantasy and reality ... takes a tongue-in-cheek attitude even as it pushes the Croc Hunter agenda .
 295	Ultimately , the message of Trouble Every Day seems to be that all sexual desire disrupts life 's stasis .
 296	If you 're like me , a sucker for a good old fashion romance and someone who shamelessly loves to eat , then Mostly Martha offers all the perfect ingredients to more than satisfy your appetite .
@@ -380,8 +380,8 @@ sentence_index	sentence
 379	... a poignant and powerful narrative that reveals that reading writing and arithmetic are not the only subjects to learn in life .
 380	Nicely serves as an examination of a society in transition .
 381	A tender and touching drama , based on the true story of a troubled African-American 's quest to come to terms with his origins , reveals the yearning we all have in our hearts for acceptance within the family circle .
-382	As a randy film about sexy people in gorgeous places being pushed and pulled -LRB- literally and figuratively -RRB- by desire ... -LRB- Sex and LucÃ­a -RRB- makes for an arousing good time .
-383	Absorbing character study by AndrÃ© Turpin .
+382	As a randy film about sexy people in gorgeous places being pushed and pulled -LRB- literally and figuratively -RRB- by desire ... -LRB- Sex and Lucia -RRB- makes for an arousing good time .
+383	Absorbing character study by Andre Turpin .
 384	Celebrated at Sundance , this slight comedy of manners has winning performances and a glossy , glib charm that 's hard to beat .
 385	Renner 's performance as Dahmer is unforgettable , deeply absorbing .
 386	If no one singles out any of these performances as award-worthy , it 's only because we would expect nothing less from this bunch .
@@ -746,7 +746,7 @@ sentence_index	sentence
 745	Aside from being the funniest movie of the year , Simone , Andrew Niccol 's brilliant anti-Hollywood satire , has a wickedly eccentric enchantment to it .
 746	Watstein handily directs and edits around his screenplay 's sappier elements ... and sustains Off the Hook 's buildup with remarkable assuredness for a first-timer .
 747	Just another fish-out-of-water story that barely stays afloat .
-748	There 's an energy to Y Tu MamÃ¡ TambiÃ©n .
+748	There 's an energy to Y Tu Mama Tambien .
 749	Much of it comes from the brave , uninhibited performances by its lead actors .
 750	It 's the kind of pigeonhole-resisting romp that Hollywood too rarely provides .
 751	Reinforces the often forgotten fact of the world 's remarkably varying human population and mindset , and its capacity to heal using creative , natural and ancient antidotes .

@@ -3,6 +3,7 @@ import os
 import pickle
 import gensim
 from gensim.models import Doc2Vec
+import random
 
 
 def load_anew(filepath=None):
@@ -103,7 +104,8 @@ def load_pickle(filename):
     return out
 
 def load_sst(path=None):
-    sentiment_file = open('data\stanfordSentimentTreebank\sentiment_labels.txt', 'r')
+    # sentiment label
+    sentiment_file = open(path+'sentiment_labels.txt', 'r')
     sentiment_label = {}
     n = 0
     for line in sentiment_file:
@@ -113,19 +115,21 @@ def load_sst(path=None):
         n += 1
     sentiment_file.close()
 
-    dict_file = open('data\stanfordSentimentTreebank\dictionary.txt', 'r')
+    # phrase dict
+    dict_file = open(path+'dictionary.txt', 'r')
     phrase_dict = {}
     for line in dict_file:
-        line = line.decode('utf-8')
+        # line = line.decode('utf-8')
         lines =line.strip().split('|')
         phrase_dict[lines[0]] = int(lines[1])
     dict_file.close()
 
-    sentence_file = open('data\stanfordSentimentTreebank\datasetSentences.txt', 'r')
+    #sentence dict
+    sentence_file = open(path+'datasetSentences.txt', 'r')
     sentence_dict = {}
     n = 0
     for line in sentence_file:
-        line = line.decode('utf-8')
+        # line = line.decode('utf-8')
         line = line.replace('-LRB-', '(')
         line = line.replace('-RRB-', ')')
         lines = line.strip().split('\t')
@@ -134,7 +138,8 @@ def load_sst(path=None):
         n += 1
     sentence_file.close()
 
-    datasplit_file = open('data\stanfordSentimentTreebank\datasetSplit.txt', 'r')
+    # datasplit
+    datasplit_file = open(path+'datasetSplit.txt', 'r')
     split_dict = {}
     n = 0
     for line in datasplit_file:
@@ -143,6 +148,19 @@ def load_sst(path=None):
             split_dict[int(lines[0])] = int(lines[1])
         n += 1
     datasplit_file.close()
+
+    senti = sentiment_label[phrase_dict[sentence_dict[102+1]]]
+    print(senti)
+    # exit()
+
+    for i in range(11854):
+        try:
+            sentiment_label[phrase_dict[sentence_dict[i+1]]]
+        except:
+            print('*----'*100)
+            print(i, sentence_dict[i+1])
+    exit()
+
 
     vec_file = open('vec_stanford.pkl','r')
     vecs = cPickle.load(vec_file)
@@ -159,10 +177,10 @@ def load_sst(path=None):
         try:
             senti = sentiment_label[phrase_dict[sentence_dict[i+1]]]
         except:
-            print sentence_dict[i+1]
+            print(sentence_dict[i+1])
             continue
         #print vecs[i]
-        print senti, sentence_dict[i+1]
+        print(senti, sentence_dict[i+1])
         if (senti > 0.4) and (senti <= 0.6):
             continue
         if senti > 0.6:
@@ -181,7 +199,7 @@ def load_sst(path=None):
             x_valid.append(vecs[i])
             y_valid.append(senti)
 
-    print len(x_train), len(x_valid), len(x_test)
+    print(len(x_train), len(x_valid), len(x_test))
     t = zip(x_train, y_train)
     random.shuffle(t)
     x_train, y_train = zip(*t)
@@ -190,4 +208,4 @@ def load_sst(path=None):
     cPickle.dump(((x_train,y_train), (x_valid, y_valid), (x_test, y_test)), sentiment_trainingdata)
     sentiment_trainingdata.close()
 
-    print y_train
+    print(y_train)
