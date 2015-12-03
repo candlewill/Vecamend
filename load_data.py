@@ -165,165 +165,71 @@ def load_sst(path=None, level=None):
             split_dict[int(lines[0])] = int(lines[1])
         n += 1
     datasplit_file.close()
-    size = len(sentence_dict)
 
-    senti = sentiment_label[phrase_dict[cleanStr(sentence_dict[0 + 1])]]
-    print(senti)
+    size = len(sentence_dict)        # size = 11855
+    # for i in range(1000):
+    #     senti = sentiment_label[phrase_dict[cleanStr(sentence_dict[i + 1])]]
+    #     print(i, senti, cleanStr(sentence_dict[i + 1]))
     # exit()
+    x_train, y_train_valence, y_train_labels = [], [], []
+    x_test, y_test_valence, y_test_labels = [], [], []
+    x_valid, y_valid_valence, y_valid_labels = [], [], []
 
-    for i in range(11854):
-        try:
-            print(sentiment_label[phrase_dict[cleanStr(sentence_dict[i + 1])]])
-        except:
-            print('*----' * 100)
-            print(i, sentence_dict[i + 1], cleanStr(sentence_dict[i + 1]))
-    exit()
+    x_train_polarity, y_train_polarity = [], []
+    x_test_polarity, y_test_polarity = [], []
+    x_valid_polarity, y_valid_polarity = [], []
 
-    vec_file = open('vec_stanford.pkl', 'r')
-    vecs = cPickle.load(vec_file)
-    vec_file.close()
-
-    x_train, y_train = [], []
-    x_test, y_test = [], []
-    x_valid, y_valid = [], []
-
-    n0 = 0
-    n1 = 1
-    for i in range(len(vecs)):
+    for i in range(size):
         # print sentence_dict[i+1].encode('utf-8')
+        sentence = cleanStr(sentence_dict[i + 1])
+        senti = sentiment_label[phrase_dict[sentence]]
 
-        senti = sentiment_label[phrase_dict[sentence_dict[i + 1]]]
+        # print(senti, sentence)
+        labels, polarity = None, None
+        if 0<=senti<=0.2:
+            labels = 1
+            polarity = 0
+        if 0.2<senti<=0.4:
+            labels = 2
+            polarity = 0
+        if 0.4<senti <= 0.6:
+            labels = 3
+        if 0.6<senti <= 0.8:
+            labels = 4
+            polarity = 1
+        if 0.8<senti <= 1:
+            labels = 5
+            polarity = 1
+        if labels is None:
+            raise Exception('Sentiment Error !')
 
-        # print vecs[i]
-        print(senti, sentence_dict[i + 1])
-        if (senti > 0.4) and (senti <= 0.6):
-            continue
-        if senti > 0.6:
-            senti = 1
-            n1 += 1
-        if senti <= 0.4:
-            senti = 0
-            n0 += 1
         if split_dict[i + 1] == 1:
-            x_train.append(vecs[i])
-            y_train.append(senti)
+            x_train.append(sentence)
+            y_train_valence.append(senti)
+            y_train_labels.append(labels)
+            if polarity is not None:
+                x_train_polarity.append(sentence)
+                y_train_polarity.append(polarity)
         elif split_dict[i + 1] == 2:
-            x_test.append(vecs[i])
-            y_test.append(senti)
+            x_test.append(sentence)
+            y_test_valence.append(senti)
+            y_test_labels.append(labels)
+            if polarity is not None:
+                x_test_polarity.append(sentence)
+                y_test_polarity.append(polarity)
         else:
-            x_valid.append(vecs[i])
-            y_valid.append(senti)
+            x_valid.append(sentence)
+            y_valid_valence.append(senti)
+            y_valid_labels.append(labels)
+            if polarity is not None:
+                x_valid_polarity.append(sentence)
+                y_valid_polarity.append(polarity)
 
     print(len(x_train), len(x_valid), len(x_test))
-    t = zip(x_train, y_train)
-    random.shuffle(t)
-    x_train, y_train = zip(*t)
+    print(len(x_train_polarity), len(x_valid_polarity), len(x_test_polarity))
 
-    sentiment_trainingdata = open('sentiment_trainingdata.pkl', 'w')
-    cPickle.dump(((x_train, y_train), (x_valid, y_valid), (x_test, y_test)), sentiment_trainingdata)
-    sentiment_trainingdata.close()
+    # t = zip(x_train, y_train)
+    # random.shuffle(t)
+    # x_train, y_train = zip(*t)
 
-    print(y_train)
-
-
-def load_sst_2(path=None):
-    def cleanStr(string):
-        string = re.sub(r'^A-Za-z0-9(),!?\'\`', ' ', string)
-        string = re.sub(r'\s{2,}', ' ', string)
-        string = string.replace('Ã¡', 'á').replace('Ã©', 'é').replace('Ã±', 'ñ').replace('Â', '').replace('Ã¯', 'ï')
-        string = string.replace('Ã¼', 'ü').replace('Ã¢', 'â').replace('Ã¨', 'è').replace('Ã¶', 'ö').replace('Ã¦', 'æ')
-        string = string.replace('Ã³', 'ó').replace('Ã»', 'û').replace('Ã´', 'ô').replace('Ã£', 'ã').replace('Ã§', 'ç')
-        string = string.replace('Ã  ', 'à ').replace('Ã', 'í').replace('í­', 'í')
-        return string
-
-    def loadSentences(fileName):
-        Index2Sentence = {}
-        Sentence2Index = {}
-        with open(fileName, 'r') as fopen:
-            i = 0
-            for line in fopen:
-                if i > 0:
-                    parts = line.split('\t')
-                    index = int(parts[0])
-                    sentence = parts[1].replace('-LRB-', '(').replace('-RRB-', ')').replace('\n', '')
-                    sentence = cleanStr(sentence)
-                    Index2Sentence[index] = sentence
-                    Sentence2Index[sentence] = index
-                i += 1
-        return Index2Sentence, Sentence2Index
-
-    def lookupDict(dictFileName, Sentence2Index):
-        Sentence2SentimentIndex = {}
-        with open(dictFileName, 'r') as fopen:
-            for line in fopen:
-                parts = line.split('|')
-                sentiment = parts[0].replace('-LRB-', '(').replace('-RRB-', ')').replace('\n', '')
-                sentiment = cleanStr(sentiment)
-                index = int(parts[1])
-                if sentiment in Sentence2Index:
-                    Sentence2SentimentIndex[sentiment] = index
-        # assert len(Sentence2SentimentIndex) == len(Sentence2Index)
-        for sentence in Sentence2Index:
-            if not sentence in Sentence2SentimentIndex:
-                print(sentence)
-        return Sentence2SentimentIndex
-
-    def loadLabels(sentimentLabelFile):
-        SentimentIndex2Label = {}
-        with open(sentimentLabelFile, 'r') as fopen:
-            i = 0
-            for line in fopen:
-                if i > 0:
-                    parts = line.split('|')
-                    index = int(parts[0])
-                    value = min(int(float(parts[1]) // 0.2), 4)
-                    SentimentIndex2Label[index] = value
-                i += 1
-        return SentimentIndex2Label
-
-    def loadSetLabel(setLabelFile):
-        '''
-        SetLabel: 1-train 2-test 3-dev
-        '''
-        Index2SetLabel = {}
-        with open(setLabelFile, 'r') as fopen:
-            i = 0
-            for line in fopen:
-                if i > 0:
-                    parts = line.split(',')
-                    index = int(parts[0])
-                    setLabel = int(parts[1])
-                    Index2SetLabel[index] = setLabel
-                i += 1
-        return Index2SetLabel
-
-    def loadData(Sentence2Index, Index2Sentence, Sentence2SentimentIndex, SentimentIndex2Label, Index2SetLabel):
-        vocab = defaultdict(float)
-        sentences = []
-        for sentence in Sentence2Index:
-            index = Sentence2Index[sentence]
-            sentimentIndex = Sentence2SentimentIndex[sentence]
-            label = SentimentIndex2Label[sentimentIndex]
-            setLabel = Index2SetLabel[index]
-            clean = cleanStr(sentence)
-            clean = clean.lower()
-            words = set(clean.split())
-            for word in words:
-                vocab[word] += 1
-            sentences.append({'label': label, 'text': clean.split(), 'setLabel': setLabel, 'len': len(clean.split())})
-        return sentences, vocab
-
-    fileName = path + 'datasetSentences.txt'
-    dictFileName = path + 'dictionary.txt'
-    sentimentLabelFile = path + 'sentiment_labels.txt'
-    setLabelFile = path + 'datasetSplit.txt'
-    Index2Sentence, Sentence2Index = loadSentences(fileName)
-    Sentence2SentimentIndex = lookupDict(dictFileName, Sentence2Index)
-    SentimentIndex2Label = loadLabels(sentimentLabelFile)
-    Index2SetLabel = loadSetLabel(setLabelFile)
-    sentences, vocab = loadData(Sentence2Index, Index2Sentence, Sentence2SentimentIndex, SentimentIndex2Label,
-                                Index2SetLabel)
-    # pickle.dump(
-    #     [sentences, vocab, {'classes': 5, 'all': [1, 2, 3], 'train': [1], 'test': [2], 'dev': [3], 'cross': False}],
-    #     open('data', 'wb'))
-    print('data processed')
+    # Data format: sentence_all, valence, labels, sentence_part, polarity.

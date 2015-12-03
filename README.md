@@ -151,3 +151,22 @@ This experiment uses the DAN model to classify sentence into binary and fine-gra
 
 1. Stanford Sentiment Treebank (SST)
 
+Dataset Description
+
+|Task|Number of Training|Number of Validation|Number of Test|Total Number|
+|---------|---------|---------|---------|---------|
+|Fine-grained SA|8544|1101|2210|11855|
+|Binary SA|6920|872|1821|
+|Continuous SA|8544|1101|2210|11855|
+
+In the fine-grained sentiment classification task, we separate all the data in SST into five classes using the following cut-offs for *very negative, negative, neutral, positive, very positive*, respectively: 
+
+[0, 0.2], (0.2, 0.4], (0.4, 0.6], (0.6, 0.8], (0.8, 1.0]
+
+In practise, integer numbers from 1 to 5 is used to indicate the above five classes. 
+
+In the binary sentiment classification task, the sentences with sentiment value between 0.4 and 0.6 are ignored, and the sentiment of sentence is regarded as negative if its sentiment ratings is less than 0.4 and positive if greater than 0.6.
+ 
+In the continuous sentiment prediction task, the original sentiment labels are used as the valence of a sentence, and we trained a regression model to predict the valence of sentence.
+
+Note that all the data are separated into training, validation and testing data according to the splitting method provided by Richard Socher for fair comparison. The validation data is the same to the develop data.
