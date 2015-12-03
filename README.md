@@ -156,7 +156,7 @@ Dataset Description
 |Task|Number of Training|Number of Validation|Number of Test|Total Number|
 |---------|---------|---------|---------|---------|
 |Fine-grained SA|8544|1101|2210|11855|
-|Binary SA|6920|872|1821|
+|Binary SA|6920|872|1821|9613|
 |Continuous SA|8544|1101|2210|11855|
 
 In the fine-grained sentiment classification task, we separate all the data in SST into five classes using the following cut-offs for *very negative, negative, neutral, positive, very positive*, respectively: 
