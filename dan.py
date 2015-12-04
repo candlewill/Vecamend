@@ -11,6 +11,7 @@ from keras.layers.core import Dense, Dropout, Activation, TimeDistributedMerge
 from keras.layers.embeddings import Embedding
 from keras.layers.recurrent import LSTM, GRU
 from keras.datasets import imdb
+from keras.constraints import unitnorm
 from sentiment_classification import build_keras_input
 
 '''
@@ -71,6 +72,53 @@ def dan_pre_trained(max_features, weights=None):
     model.add(Dense(input_dim=300, output_dim=1, activation = 'sigmoid'))
     return model
 
+def dan_simplified(max_features, weights=None):
+    '''
+    DAN model with pre-trained embeddings, just use one non-linear layer
+    :param max_features: the number of words
+    :return: keras model
+    '''
+    print('Build model...')
+    model = Sequential()
+    model.add(Embedding(input_dim = max_features, output_dim = 300, weights=[weights]))
+    model.add(TimeDistributedMerge(mode='ave'))
+    model.add(Dense(input_dim=300, output_dim=300, activation = 'relu'))
+    model.add(Dropout(.5))
+    model.add(Dense(input_dim=300, output_dim=1, activation = 'sigmoid'))
+    return model
+
+def dan_dropout(max_features, weights=None):
+    '''
+    DAN model with pre-trained embeddings, the position of dropout is changed
+    :param max_features: the number of words
+    :return: keras model
+    '''
+    print('Build model...')
+    model = Sequential()
+    model.add(Embedding(input_dim = max_features, output_dim = 300, weights=[weights]))
+    model.add(Dropout(.5))
+    model.add(TimeDistributedMerge(mode='ave'))
+    model.add(Dense(input_dim=300, output_dim=300, activation = 'relu'))
+    model.add(Dropout(.5))
+    model.add(Dense(input_dim=300, output_dim=1, activation = 'sigmoid'))
+    return model
+
+def dan_dropout_p(max_features, weights=None):
+    '''
+    DAN model with pre-trained embeddings, the position of dropout is changed and the dropuout rate is 0.3
+    :param max_features: the number of words
+    :return: keras model
+    '''
+    print('Build model...')
+    model = Sequential()
+    model.add(Embedding(input_dim = max_features, output_dim = 300, weights=[weights]))
+    model.add(TimeDistributedMerge(mode='ave'))
+    model.add(Dropout(.5))
+    model.add(Dense(input_dim=300, output_dim=300, activation = 'relu'))
+    model.add(Dropout(.5))
+    model.add(Dense(input_dim=300, output_dim=1, activation = 'sigmoid'))
+    return model
+
 def test_dan_original():
     max_features = 20000
     maxlen = 100  # cut texts after this number of words (among top max_features most common words)
@@ -108,7 +156,7 @@ def SA_sst():
      x_valid_polarity_idx_data, y_valid_polarity), W) = build_keras_input()
 
 
-    maxlen = 100  # cut texts after this number of words (among top max_features most common words)
+    maxlen = 200  # cut texts after this number of words (among top max_features most common words)
     batch_size = 32
     (X_train, y_train), (X_test, y_test), (X_valid, y_valide) = (x_train_polarity_idx_data, y_train_polarity), (x_test_polarity_idx_data, y_test_polarity), (x_valid_polarity_idx_data, y_valid_polarity)
     print(len(X_train), 'train sequences')
@@ -128,15 +176,18 @@ def SA_sst():
     print('X_train shape:', X_train.shape)
     print('X_test shape:', X_test.shape)
 
-    model = dan_pre_trained(max_features, W)
+    model = dan_dropout_p(max_features, W)
 
     # try using different optimizers and different optimizer configs
     model.compile(loss='binary_crossentropy', optimizer='adagrad', class_mode="binary")
 
     print("Train...")
-    model.fit(X_train, y_train, batch_size=batch_size, nb_epoch=18, validation_data=(X_test, y_test), show_accuracy=True)
+    model.fit(X_train, y_train, batch_size=batch_size, nb_epoch=50, validation_data=(X_test, y_test), show_accuracy=True)
     score, acc = model.evaluate(X_test, y_test, batch_size=batch_size, show_accuracy=True)
     print('Test score:', score)
     print('Test accuracy:', acc)
+
+
+
 if __name__ == "__main__":
     SA_sst()
