@@ -170,3 +170,8 @@ In the binary sentiment classification task, the sentences with sentiment value 
 In the continuous sentiment prediction task, the original sentiment labels are used as the valence of a sentence, and we trained a regression model to predict the valence of sentence.
 
 Note that all the data are separated into training, validation and testing data according to the splitting method provided by Richard Socher for fair comparison. The validation data is the same to the develop data.
+
+
+### Python packages
+
+1. Keras 0.3
