@@ -3,10 +3,8 @@ import os
 import pickle
 import gensim
 from gensim.models import Doc2Vec
-import random
-import numpy as np
 import re
-from collections import defaultdict
+from save_data import dump_picle
 
 
 def load_anew(filepath=None):
@@ -112,6 +110,11 @@ def load_pickle(filename):
 
 
 def load_sst(path=None, level=None):
+    filename = './tmp/SST.p'
+    if os.path.isfile(filename):
+        print('Load OK.')
+        return load_pickle(filename)
+
     def cleanStr(string):
         string = re.sub(r'^A-Za-z0-9(),!?\'\`', ' ', string)
         string = re.sub(r'\s{2,}', ' ', string)
@@ -166,7 +169,7 @@ def load_sst(path=None, level=None):
         n += 1
     datasplit_file.close()
 
-    size = len(sentence_dict)        # size = 11855
+    size = len(sentence_dict)  # size = 11855
     # for i in range(1000):
     #     senti = sentiment_label[phrase_dict[cleanStr(sentence_dict[i + 1])]]
     #     print(i, senti, cleanStr(sentence_dict[i + 1]))
@@ -186,18 +189,18 @@ def load_sst(path=None, level=None):
 
         # print(senti, sentence)
         labels, polarity = None, None
-        if 0<=senti<=0.2:
+        if 0 <= senti <= 0.2:
             labels = 1
             polarity = 0
-        if 0.2<senti<=0.4:
+        if 0.2 < senti <= 0.4:
             labels = 2
             polarity = 0
-        if 0.4<senti <= 0.6:
+        if 0.4 < senti <= 0.6:
             labels = 3
-        if 0.6<senti <= 0.8:
+        if 0.6 < senti <= 0.8:
             labels = 4
             polarity = 1
-        if 0.8<senti <= 1:
+        if 0.8 < senti <= 1:
             labels = 5
             polarity = 1
         if labels is None:
@@ -225,11 +228,19 @@ def load_sst(path=None, level=None):
                 x_valid_polarity.append(sentence)
                 y_valid_polarity.append(polarity)
 
-    print(len(x_train), len(x_valid), len(x_test))
-    print(len(x_train_polarity), len(x_valid_polarity), len(x_test_polarity))
+    print("Fine-grained: #training: %s, #valid: %s, #test: %s" % (len(x_train), len(x_valid), len(x_test)))
+    print("Binary classification: #train: %s, #valid: %s, #test: %s" % (
+        len(x_train_polarity), len(x_valid_polarity), len(x_test_polarity)))
 
     # t = zip(x_train, y_train)
     # random.shuffle(t)
     # x_train, y_train = zip(*t)
-
-    # Data format: sentence_all, valence, labels, sentence_part, polarity.
+    output = (x_train, y_train_valence, y_train_labels,
+               x_test, y_test_valence, y_test_labels,
+               x_valid, y_valid_valence, y_valid_labels,
+               x_train_polarity, y_train_polarity,
+               x_test_polarity, y_test_polarity,
+               x_valid_polarity, y_valid_polarity)
+    dump_picle(output, filename)
+    print('Data saved and load successfully.')
+    return output
