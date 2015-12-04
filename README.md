@@ -172,7 +172,7 @@ In the continuous sentiment prediction task, the original sentiment labels are u
 Note that all the data are separated into training, validation and testing data according to the splitting method provided by Richard Socher for fair comparison. The validation data is the same to the develop data.
 
 
-### Dependencies
+### Important Dependencies
 
-* Python 3.4
-* Keras 0.3
+* Python 3.4.3
+* Keras 0.3.0
