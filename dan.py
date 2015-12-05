@@ -13,6 +13,9 @@ from keras.layers.recurrent import LSTM, GRU
 from keras.datasets import imdb
 from keras.constraints import unitnorm
 from sentiment_classification import build_keras_input
+from keras.layers.core import Reshape, Flatten
+from keras.layers.convolutional import Convolution2D, MaxPooling2D
+from keras.regularizers import l2
 
 '''
     Train a deep averaging network (DAN) using keras.
@@ -119,6 +122,100 @@ def dan_dropout_p(max_features, weights=None):
     model.add(Dense(input_dim=300, output_dim=1, activation = 'sigmoid'))
     return model
 
+def cnn(W):
+    # Number of feature maps (outputs of convolutional layer)
+    N_fm = 300
+    # kernel size of convolutional layer
+    kernel_size = 8
+    conv_input_width = W.shape[1]
+    conv_input_height = 200     # maxlen of sentence
+
+    model = Sequential()
+    # Embedding layer (lookup table of trainable word vectors)
+    model.add(Embedding(input_dim=W.shape[0], output_dim=W.shape[1], weights=[W], W_constraint=unitnorm()))
+    # Reshape word vectors from Embedding to tensor format suitable for Convolutional layer
+    model.add(Reshape(dims=(1, conv_input_height, conv_input_width)))
+
+    # first convolutional layer
+    model.add(Convolution2D(N_fm, 1, kernel_size, conv_input_width, border_mode='valid', W_regularizer=l2(0.0001)))
+    # ReLU activation
+    model.add(Activation('relu'))
+
+    # aggregate data in every feature map to scalar using MAX operation
+    model.add(MaxPooling2D(pool_size=(conv_input_height-kernel_size+1, 1), ignore_border=True))
+
+    model.add(Flatten())
+    model.add(Dropout(0.5))
+    # Inner Product layer (as in regular neural network, but without non-linear activation function)
+    model.add(Dense(N_fm, 2))
+    # SoftMax activation; actually, Dense+SoftMax works as Multinomial Logistic Regression
+    model.add(Activation('softmax'))
+
+    # Custom optimizers could be used, though right now standard adadelta is employed
+    model.compile(loss='categorical_crossentropy', optimizer='adadelta')
+    return model
+
+def cnn_simplified(W):
+    # Number of feature maps (outputs of convolutional layer)
+    N_fm = 300
+    # kernel size of convolutional layer
+    kernel_size = 8
+    conv_input_width = W.shape[1]
+    conv_input_height = 200     # maxlen of sentence
+
+    model = Sequential()
+    # Embedding layer (lookup table of trainable word vectors)
+    model.add(Embedding(input_dim=W.shape[0], output_dim=W.shape[1], weights=[W], W_constraint=unitnorm()))
+    # Reshape word vectors from Embedding to tensor format suitable for Convolutional layer
+    model.add(Reshape(dims=(1, conv_input_height, conv_input_width)))
+
+    # first convolutional layer
+    model.add(Convolution2D(N_fm, kernel_size, conv_input_width, border_mode='valid', W_regularizer=l2(0.0001)))
+    # ReLU activation
+    model.add(Activation('relu'))
+
+    # aggregate data in every feature map to scalar using MAX operation
+    model.add(MaxPooling2D(pool_size=(conv_input_height-kernel_size+1, 1), border_mode='valid'))
+
+    model.add(Flatten())
+    model.add(Dropout(0.5))
+    # Inner Product layer (as in regular neural network, but without non-linear activation function)
+    model.add(Dense(input_dim=N_fm, output_dim=1))
+    # SoftMax activation; actually, Dense+SoftMax works as Multinomial Logistic Regression
+    model.add(Activation('sigmoid'))
+    return model
+
+def cnn_optimise(W):
+    # Number of feature maps (outputs of convolutional layer)
+    N_fm = 300
+    # kernel size of convolutional layer
+    kernel_size = 8
+    conv_input_width = W.shape[1]
+    conv_input_height = 200     # maxlen of sentence
+
+    model = Sequential()
+    # Embedding layer (lookup table of trainable word vectors)
+    model.add(Embedding(input_dim=W.shape[0], output_dim=W.shape[1], weights=[W], W_constraint=unitnorm()))
+    # Reshape word vectors from Embedding to tensor format suitable for Convolutional layer
+    model.add(Reshape(dims=(1, conv_input_height, conv_input_width)))
+
+    # first convolutional layer
+    model.add(Convolution2D(N_fm, kernel_size, conv_input_width, border_mode='valid', W_regularizer=l2(0.0001)))
+    # ReLU activation
+    model.add(Activation('relu'))
+    model.add(Dropout(0.5))
+
+    # aggregate data in every feature map to scalar using MAX operation
+    model.add(MaxPooling2D(pool_size=(conv_input_height-kernel_size+1, 1), border_mode='valid'))
+
+    model.add(Flatten())
+    model.add(Dropout(0.5))
+    # Inner Product layer (as in regular neural network, but without non-linear activation function)
+    model.add(Dense(input_dim=N_fm, output_dim=1))
+    # SoftMax activation; actually, Dense+SoftMax works as Multinomial Logistic Regression
+    model.add(Activation('sigmoid'))
+    return model
+
 def test_dan_original():
     max_features = 20000
     maxlen = 100  # cut texts after this number of words (among top max_features most common words)
@@ -176,7 +273,7 @@ def SA_sst():
     print('X_train shape:', X_train.shape)
     print('X_test shape:', X_test.shape)
 
-    model = dan_dropout_p(max_features, W)
+    model = cnn_optimise(W)
 
     # try using different optimizers and different optimizer configs
     model.compile(loss='binary_crossentropy', optimizer='adagrad', class_mode="binary")
