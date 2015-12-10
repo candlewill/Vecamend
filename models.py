@@ -160,7 +160,7 @@ def SA_sst():
     #             if j > m:
     #                 m=j
     # print(m)
-    max_features = W.shape[0] # shape of W: (13631, 300)
+    max_features = W.shape[0] # shape of W: (13631, 300) , changed to 14027 through min_df = 3
 
     print("Pad sequences (samples x time)")
     X_train = sequence.pad_sequences(X_train, maxlen=maxlen)
@@ -171,7 +171,7 @@ def SA_sst():
     y_train = np_utils.to_categorical(y_train, nb_classes)
     y_test = np_utils.to_categorical(y_test, nb_classes)
 
-    model = cnn_optimise(W)
+    model = dan_pre_trained(W)
     plot(model, to_file='./images/model.png')
 
     # try using different optimizers and different optimizer configs
