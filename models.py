@@ -138,7 +138,7 @@ def dan_dropout_position(weights=None):
     model.add(Dropout(.5))
     model.add(Dense(input_dim=300, output_dim=300, activation = 'relu'))
     model.add(Dropout(.5))
-    model.add(Dense(input_dim=300, output_dim=1, activation = 'sigmoid'))
+    model.add(Dense(input_dim=300, output_dim=1, activation = 'softmax'))
     return model
 
 def cnn(W):
@@ -171,7 +171,7 @@ def cnn(W):
     model.add(Activation('softmax'))
 
     # Custom optimizers could be used, though right now standard adadelta is employed
-
+    model.compile(loss='categorical_crossentropy', optimizer='adadelta')
     return model
 
 def cnn_simplified(W):
@@ -256,7 +256,8 @@ def test_dan_original():
     model = dan_original(max_features)
 
     # try using different optimizers and different optimizer configs
-    model.compile(loss='binary_crossentropy', optimizer='adagrad', class_mode="binary")
+    # model.compile(loss='binary_crossentropy', optimizer='adagrad', class_mode="binary")
+    model.compile(loss='categorical_crossentropy', optimizer='adadelta')
 
     print("Train...")
     model.fit(X_train, y_train, batch_size=batch_size, nb_epoch=3, validation_data=(X_test, y_test), show_accuracy=True)
@@ -292,11 +293,15 @@ def SA_sst():
     X_test = sequence.pad_sequences(X_test, maxlen=maxlen)
     print('X_train shape:', X_train.shape)
     print('X_test shape:', X_test.shape)
+    nb_classes = 2
+    y_train = np_utils.to_categorical(y_train, nb_classes)
+    y_test = np_utils.to_categorical(y_test, nb_classes)
 
     model = dan_dropout_position(W)
 
     # try using different optimizers and different optimizer configs
-    model.compile(loss='binary_crossentropy', optimizer='adagrad', class_mode="binary")
+    # model.compile(loss='binary_crossentropy', optimizer='adagrad', class_mode="binary")
+    model.compile(loss='categorical_crossentropy', optimizer='adadelta')
 
     print("Train...")
     model.fit(X_train, y_train, batch_size=batch_size, nb_epoch=30, validation_data=(X_test, y_test), show_accuracy=True)
