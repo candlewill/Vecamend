@@ -53,9 +53,9 @@ def dan_pre_trained(weights=None):
     model.add(Dense(input_dim=300, output_dim=300, activation = 'relu'))
     model.add(Dropout(.5))
     model.add(Dense(input_dim=300, output_dim=300, activation = 'relu'))
-    model.add(Dropout(.4))
+    model.add(Dropout(.5))
     model.add(Dense(input_dim=300, output_dim=300, activation = 'relu'))
-    model.add(Dropout(.3))
+    model.add(Dropout(.5))
     model.add(Dense(input_dim=300, output_dim=2, activation = 'softmax'))
     return model
 
@@ -74,20 +74,19 @@ def cnn_optimise(W):
     model.add(Reshape(dims=(1, conv_input_height, conv_input_width)))
 
     # first convolutional layer
-    model.add(Convolution2D(N_fm, kernel_size, conv_input_width, border_mode='valid', W_regularizer=l2(0.0001)))
+    model.add(Convolution2D(N_fm, kernel_size, conv_input_width, border_mode='valid', W_regularizer=l2(0.0001), activation = 'relu'))
     # ReLU activation
     model.add(Dropout(0.5))
-    model.add(Activation('relu'))
 
     # aggregate data in every feature map to scalar using MAX operation
     model.add(MaxPooling2D(pool_size=(conv_input_height-kernel_size+1, 1), border_mode='valid'))
     model.add(Dropout(0.5))
     model.add(Flatten())
-
+    model.add(Dense(output_dim=N_fm, activation = 'relu'))
+    model.add(Dropout(0.5))
     # Inner Product layer (as in regular neural network, but without non-linear activation function)
-    model.add(Dense(input_dim=N_fm, output_dim=2))
+    model.add(Dense(output_dim=2, activation = 'softmax'))
     # SoftMax activation; actually, Dense+SoftMax works as Multinomial Logistic Regression
-    model.add(Activation('softmax'))
     return model
 
 def SA_sst():
