@@ -13,7 +13,7 @@ from keras.layers.recurrent import LSTM, GRU
 from keras.datasets import imdb
 from keras.constraints import unitnorm
 from sentiment_classification import build_keras_input
-from keras.layers.core import Reshape, Flatten
+from keras.layers.core import Reshape, Flatten, Merge
 from keras.layers.convolutional import Convolution2D, MaxPooling2D
 from keras.regularizers import l2
 from keras.utils.visualize_util import plot
@@ -74,7 +74,7 @@ def cnn_optimise(W):
     model.add(Reshape(dims=(1, conv_input_height, conv_input_width)))
 
     # first convolutional layer
-    model.add(Convolution2D(N_fm, kernel_size, conv_input_width, border_mode='valid', W_regularizer=l2(0.0001), activation = 'relu'))
+    model.add(Convolution2D(nb_filter=N_fm, nb_row=kernel_size, nb_col=conv_input_width, border_mode='valid', W_regularizer=l2(0.0001), activation = 'relu'))
     # ReLU activation
     model.add(Dropout(0.5))
 
@@ -88,6 +88,56 @@ def cnn_optimise(W):
     model.add(Dense(output_dim=2, activation = 'softmax'))
     # SoftMax activation; actually, Dense+SoftMax works as Multinomial Logistic Regression
     return model
+
+def hybrid_model(W):
+    '''
+    This function return a hybrid model of cnn and dan
+    :param W: initial weights of the embedding layer
+    :return: model
+    '''
+    max_features = W.shape[0]
+    N_fm = 300
+    # kernel size of convolutional layer
+    kernel_size = 8
+    conv_input_width = W.shape[1]
+    conv_input_height = 200     # maxlen of sentence
+
+    cnn = Sequential()
+    cnn.add(Embedding(input_dim = max_features, output_dim = 300, weights=[W]))
+    cnn.add(Dropout(.5))
+    cnn.add(Reshape(dims=(1, conv_input_height, conv_input_width)))
+    # first convolutional layer
+    cnn.add(Convolution2D(nb_filter=N_fm, nb_row=kernel_size, nb_col=conv_input_width, border_mode='valid', W_regularizer=l2(0.0001), activation = 'relu'))
+    # ReLU activation
+    cnn.add(Dropout(0.5))
+    # aggregate data in every feature map to scalar using MAX operation
+    cnn.add(MaxPooling2D(pool_size=(conv_input_height-kernel_size+1, 1), border_mode='valid'))
+    cnn.add(Dropout(0.5))
+    cnn.add(Flatten())
+    cnn.add(Dense(output_dim=N_fm, activation = 'relu'))
+
+    dan=Sequential()
+    dan.add(Embedding(input_dim = max_features, output_dim = 300, weights=[W]))
+    dan.add(Dropout(.5))
+    dan.add(TimeDistributedMerge(mode='ave'))
+    dan.add(Dense(input_dim=300, output_dim=300, activation = 'relu'))
+    dan.add(Dropout(.5))
+    dan.add(Dense(input_dim=300, output_dim=300, activation = 'relu'))
+    dan.add(Dropout(.5))
+    dan.add(Dense(input_dim=300, output_dim=300, activation = 'relu'))
+
+    model = Sequential()
+    model.add(Merge([cnn, dan], mode='sum'))
+    model.add(Dense(300, activation='relu'))
+    dan.add(Dropout(.5))
+    model.add(Dense(2, activation='softmax'))
+    return model
+
+    # The input data of this function:
+    # model.fit([X_train,X_train], y_train, batch_size=batch_size, nb_epoch=100, validation_data=([X_test,X_test], y_test), show_accuracy=True, callbacks=[early_stopping])
+    # score, acc = model.evaluate([X_test,X_test], y_test, batch_size=batch_size, show_accuracy=True)
+
+
 
 def SA_sst():
     ((x_train_idx_data, y_train_valence, y_train_labels,
