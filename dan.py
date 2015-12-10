@@ -203,14 +203,14 @@ def cnn_optimise(W):
     # first convolutional layer
     model.add(Convolution2D(N_fm, kernel_size, conv_input_width, border_mode='valid', W_regularizer=l2(0.0001)))
     # ReLU activation
-    model.add(Activation('relu'))
     model.add(Dropout(0.5))
+    model.add(Activation('relu'))
 
     # aggregate data in every feature map to scalar using MAX operation
     model.add(MaxPooling2D(pool_size=(conv_input_height-kernel_size+1, 1), border_mode='valid'))
-
-    model.add(Flatten())
     model.add(Dropout(0.5))
+    model.add(Flatten())
+
     # Inner Product layer (as in regular neural network, but without non-linear activation function)
     model.add(Dense(input_dim=N_fm, output_dim=1))
     # SoftMax activation; actually, Dense+SoftMax works as Multinomial Logistic Regression
@@ -281,7 +281,7 @@ def SA_sst():
     model.compile(loss='binary_crossentropy', optimizer='adagrad', class_mode="binary")
 
     print("Train...")
-    model.fit(X_train, y_train, batch_size=batch_size, nb_epoch=2, validation_data=(X_test, y_test), show_accuracy=True)
+    model.fit(X_train, y_train, batch_size=batch_size, nb_epoch=30, validation_data=(X_test, y_test), show_accuracy=True)
     score, acc = model.evaluate(X_test, y_test, batch_size=batch_size, show_accuracy=True)
     print('Test score:', score)
     print('Test accuracy:', acc)
