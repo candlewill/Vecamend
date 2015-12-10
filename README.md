@@ -173,9 +173,7 @@ Note that all the data are separated into training, validation and testing data 
 
 ##### Experiment result
 
-Model visualization
-
-<p align="center"> <img src="./images/model.png" height="500" /> </p>
+Model visualization: [PNG](./images/model.png)
 
 DAN for binary SA:
 
