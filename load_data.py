@@ -94,6 +94,10 @@ def load_embeddings(arg=None, filename='None'):
         model = gensim.models.Word2Vec.load_word2vec_format(None, binary=False)
     elif arg == 'google_news':
         model = gensim.models.Word2Vec.load_word2vec_format(filename, binary=True)  # C binary format
+        w2v = dict()
+        for key in model.vocab.keys():
+            w2v[key]=model[key]
+        return w2v
     elif arg == 'CVAT':  # dim = 50
         model = gensim.models.Word2Vec.load(None)
     elif arg == 'twitter':  # dim = 50

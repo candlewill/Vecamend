@@ -27,13 +27,22 @@ def get_vocab(corpus):
     print('The total number of vocabulary is: %s. ' % len(vocab))
     return vocab
 
+def add_unknown_words(word_vecs, vocab, min_df=3, k=300):
+    """
+    For words that occur in at least min_df documents, create a separate word vector.
+    0.25 is chosen so the unknown vectors have (approximately) same variance as pre-trained ones
+    """
+    for word in vocab:
+        if word not in word_vecs and vocab[word] >= min_df:
+            word_vecs[word] = np.random.uniform(-0.25,0.25,k)
+    return word_vecs
 
 # word_vecs is the model of word2vec
 def build_embedding_matrix(word_vecs, vocab, k=300):
     """
     Get word matrix. W[i] is the vector for word indexed by i
     """
-    union = (set(word_vecs.vocab.keys()) & set(vocab.keys()))
+    union = (set(word_vecs.keys()) & set(vocab.keys()))
     vocab_size = len(union)
     print('The number of words occuring in corpus and word2vec simutaneously: %s.' % vocab_size)
     word_idx_map = dict()
@@ -72,6 +81,7 @@ def make_idx_data(sentences, word_idx_map):
 
 def build_keras_input():
     filename_data, filename_w = './tmp/indexed_data.p', './tmp/Weight.p'
+
     if os.path.isfile(filename_data) and os.path.isfile(filename_w):
         data = load_pickle(filename_data)
         W = load_pickle(filename_w)
@@ -88,6 +98,7 @@ def build_keras_input():
 
     vocab = get_vocab(x_train)
     word_vecs = load_embeddings('google_news', '/home/hs/Data/Word_Embeddings/google_news.bin')
+    word_vecs = add_unknown_words(word_vecs, vocab)
     W, word_idx_map = build_embedding_matrix(word_vecs, vocab)
 
     x_train_idx_data = make_idx_data(x_train, word_idx_map)
