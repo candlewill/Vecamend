@@ -5,6 +5,7 @@ import gensim
 from gensim.models import Doc2Vec
 import re
 from save_data import dump_picle
+import numpy as np
 
 
 def load_anew(filepath=None):
@@ -98,6 +99,19 @@ def load_embeddings(arg=None, filename='None'):
         for key in model.vocab.keys():
             w2v[key]=model[key]
         return w2v
+    elif arg == 'glove':
+        glove_path = '/home/hs/Data/Word_Embeddings/glove.840B.300d.txt'
+        model = dict()
+        with open(glove_path, 'r', newline='', encoding='utf-8') as f:
+            reader = csv.reader(f, quoting=csv.QUOTE_NONE, delimiter=' ')
+            for line in reader:
+                # print(line[0])
+                # split = line.split()
+                try:
+                    model[line[0]]=np.array(line[1:], dtype=float)
+                except:
+                    pass
+        return model
     elif arg == 'CVAT':  # dim = 50
         model = gensim.models.Word2Vec.load(None)
     elif arg == 'twitter':  # dim = 50

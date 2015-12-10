@@ -97,7 +97,8 @@ def build_keras_input():
      x_valid_polarity, y_valid_polarity) = load_sst(path='./resources/stanfordSentimentTreebank/')
 
     vocab = get_vocab(x_train)
-    word_vecs = load_embeddings('google_news', '/home/hs/Data/Word_Embeddings/google_news.bin')
+    # word_vecs = load_embeddings('google_news', '/home/hs/Data/Word_Embeddings/google_news.bin')
+    word_vecs = load_embeddings('glove')
     word_vecs = add_unknown_words(word_vecs, vocab)
     W, word_idx_map = build_embedding_matrix(word_vecs, vocab)
 
