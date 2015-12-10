@@ -16,6 +16,7 @@ from sentiment_classification import build_keras_input
 from keras.layers.core import Reshape, Flatten
 from keras.layers.convolutional import Convolution2D, MaxPooling2D
 from keras.regularizers import l2
+from keras.utils.visualize_util import plot
 
 '''
     Train a deep averaging network (DAN) using keras.
@@ -195,7 +196,7 @@ def cnn_optimise(W):
 
     model = Sequential()
     # Embedding layer (lookup table of trainable word vectors)
-    model.add(Embedding(input_dim=W.shape[0], output_dim=W.shape[1], weights=[W], W_constraint=unitnorm()))
+    model.add(Embedding(input_dim=W.shape[0], output_dim=W.shape[1], weights=[W], W_constraint=unitnorm(), init='uniform'))
     # Reshape word vectors from Embedding to tensor format suitable for Convolutional layer
     model.add(Reshape(dims=(1, conv_input_height, conv_input_width)))
 
@@ -214,6 +215,7 @@ def cnn_optimise(W):
     model.add(Dense(input_dim=N_fm, output_dim=1))
     # SoftMax activation; actually, Dense+SoftMax works as Multinomial Logistic Regression
     model.add(Activation('sigmoid'))
+    plot(model, to_file='./images/model.png')
     return model
 
 def test_dan_original():
@@ -279,7 +281,7 @@ def SA_sst():
     model.compile(loss='binary_crossentropy', optimizer='adagrad', class_mode="binary")
 
     print("Train...")
-    model.fit(X_train, y_train, batch_size=batch_size, nb_epoch=50, validation_data=(X_test, y_test), show_accuracy=True)
+    model.fit(X_train, y_train, batch_size=batch_size, nb_epoch=2, validation_data=(X_test, y_test), show_accuracy=True)
     score, acc = model.evaluate(X_test, y_test, batch_size=batch_size, show_accuracy=True)
     print('Test score:', score)
     print('Test accuracy:', acc)
