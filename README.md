@@ -182,4 +182,4 @@ DAN for binary SA:
 * Keras 0.3.0
 * pydot2 1.0.33 (for model visualization)
 
-There are some frequent questions and answers in [Q&A.md]("./resources/Q&A.md"). If you have any other questions or advice, any feedback is welcomed.
+There are some frequent questions and answers in [Q&A.md](./resources/Q&A.md) file. If you have any other questions or advice, any feedback is welcomed.
