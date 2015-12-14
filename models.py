@@ -18,6 +18,7 @@ from keras.layers.convolutional import Convolution2D, MaxPooling2D
 from keras.regularizers import l2
 from keras.utils.visualize_util import plot
 from keras.callbacks import EarlyStopping
+from keras.regularizers import l2
 
 '''
     Train a deep averaging network (DAN) using keras.
@@ -44,19 +45,19 @@ def dan_pre_trained(weights=None):
     :param max_features: the number of words
     :return: keras model
     '''
-    max_features = weights.shape[0]
+    max_features = weights.shape[0]      # weights.shape = (vocabulary size, vector dimension)
     print('Build model...')
     model = Sequential()
-    model.add(Embedding(input_dim = max_features, output_dim = 300, weights=[weights]))
+    model.add(Embedding(input_dim = max_features, output_dim = 300, weights=[weights], W_regularizer=l2(1e-5)))
     model.add(Dropout(.5))
     model.add(TimeDistributedMerge(mode='ave'))
-    model.add(Dense(input_dim=300, output_dim=300, activation = 'relu'))
-    model.add(Dropout(.5))
-    model.add(Dense(input_dim=300, output_dim=300, activation = 'relu'))
-    model.add(Dropout(.5))
-    model.add(Dense(input_dim=300, output_dim=300, activation = 'relu'))
-    model.add(Dropout(.5))
-    model.add(Dense(input_dim=300, output_dim=2, activation = 'softmax'))
+    model.add(Dense(input_dim=300, output_dim=300, activation = 'relu', W_regularizer=l2(1e-5), b_regularizer=l2(1e-5)))
+    model.add(Dropout(.4))
+    model.add(Dense(input_dim=300, output_dim=300, activation = 'relu', W_regularizer=l2(1e-5), b_regularizer=l2(1e-5)))
+    model.add(Dropout(.2))
+    # model.add(Dense(input_dim=300, output_dim=300, activation = 'relu', W_regularizer=l2(1e-5), b_regularizer=l2(1e-5)))
+    # model.add(Dropout(.2))
+    model.add(Dense(input_dim=300, output_dim=2, activation = 'softmax', W_regularizer=l2(1e-5), b_regularizer=l2(1e-5)))
     return model
 
 def cnn_optimise(W):
@@ -137,7 +138,7 @@ def hybrid_model(W):
     # model.fit([X_train,X_train], y_train, batch_size=batch_size, nb_epoch=100, validation_data=([X_test,X_test], y_test), show_accuracy=True, callbacks=[early_stopping])
     # score, acc = model.evaluate([X_test,X_test], y_test, batch_size=batch_size, show_accuracy=True)
 
-
+# def grid_search()
 
 def SA_sst():
     ((x_train_idx_data, y_train_valence, y_train_labels,
@@ -165,13 +166,15 @@ def SA_sst():
     print("Pad sequences (samples x time)")
     X_train = sequence.pad_sequences(X_train, maxlen=maxlen)
     X_test = sequence.pad_sequences(X_test, maxlen=maxlen)
+    X_valid = sequence.pad_sequences(X_valid, maxlen=maxlen)
     print('X_train shape:', X_train.shape)
     print('X_test shape:', X_test.shape)
     nb_classes = 2
     y_train = np_utils.to_categorical(y_train, nb_classes)
     y_test = np_utils.to_categorical(y_test, nb_classes)
+    y_valide = np_utils.to_categorical(y_valide, nb_classes)
 
-    model = cnn_optimise(W)
+    model = dan_pre_trained(W)
     plot(model, to_file='./images/model.png')
 
     # try using different optimizers and different optimizer configs
