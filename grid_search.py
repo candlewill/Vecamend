@@ -1,13 +1,9 @@
-__author__ = 'NLP'
+from __future__ import absolute_import
+from __future__ import print_function
+
 from sklearn.grid_search import ParameterGrid
 import numpy as np
 from save_data import dump_picle
-
-
-
-from __future__ import absolute_import
-from __future__ import print_function
-import numpy as np
 np.random.seed(1337)  # for reproducibility
 
 from keras.preprocessing import sequence
