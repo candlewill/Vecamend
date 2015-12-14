@@ -171,7 +171,7 @@ def SA_sst():
     y_train = np_utils.to_categorical(y_train, nb_classes)
     y_test = np_utils.to_categorical(y_test, nb_classes)
 
-    model = dan_pre_trained(W)
+    model = cnn_optimise(W)
     plot(model, to_file='./images/model.png')
 
     # try using different optimizers and different optimizer configs
