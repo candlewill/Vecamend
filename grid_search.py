@@ -22,7 +22,7 @@ from keras.regularizers import l2
 from keras.utils.visualize_util import plot
 from keras.callbacks import EarlyStopping
 from keras.regularizers import l2
-
+from load_data import load_pickle
 '''
     Train a deep averaging network (DAN) using keras.
     The model is described in "Deep Unordered Composition Rivals Syntactic Methods
@@ -193,7 +193,20 @@ def my_function(param1, param2, param3):
     print('Test accuracy:', acc)
     return acc
 
+def result_analysis(filename):
+    (param_grid, param_fitness) = load_pickle(filename)
+    grid = ParameterGrid(param_grid)
+    N=10         # top-n
+    top_n_ind = np.argsort(param_fitness)[::-1][:N]         # top-n max value index
+    for i in top_n_ind:
+        print('Parameter setting: %s, acc: %s' % (str(list(grid)[i]), param_fitness[i]))
+
+
 if __name__=='__main__':
+    result_analysis('./tmp/grid_search_result.p')
+    print('OK')
+    exit()
+
     scope = [0., 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
     param_grid = {'a':scope, 'b': scope, 'c': scope}
     param_fitness = []
