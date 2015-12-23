@@ -62,9 +62,9 @@ def dan(weights=None):
 
 def cnn(W):
     # Number of feature maps (outputs of convolutional layer)
-    N_fm = 300
+    N_fm = 20
     # kernel size of convolutional layer
-    kernel_size = 8
+    kernel_size = 3
     conv_input_width = W.shape[1]
     conv_input_height = 200     # maxlen of sentence
 
@@ -81,18 +81,28 @@ def cnn(W):
 
     # aggregate data in every feature map to scalar using MAX operation
     model.add(MaxPooling2D(pool_size=(conv_input_height-kernel_size+1, 1), border_mode='valid'))
-    model.add(Dropout(0.4))
+    model.add(Dropout(0.3))
     model.add(Flatten())
     model.add(Dense(output_dim=N_fm, activation = 'relu'))
-    model.add(Dropout(0.2))
+    model.add(Dropout(0.1))
     # Inner Product layer (as in regular neural network, but without non-linear activation function)
     model.add(Dense(output_dim=2, activation = 'softmax'))
     # SoftMax activation; actually, Dense+SoftMax works as Multinomial Logistic Regression
     return model
 
-def Deep_CNN ():
+def Deep_CNN (W):
+    # Number of feature maps (outputs of convolutional layer)
+    N_fm = 300
+    # kernel size of convolutional layer
+    kernel_size = 8
+    conv_input_width = W.shape[1]
+    conv_input_height = 200     # maxlen of sentence
+
     # Two Convolutional Layers with Pooling Layer
     model = Sequential ()
+    model.add(Embedding(input_dim=W.shape[0], output_dim=W.shape[1], weights=[W], W_constraint=unitnorm()))
+    # Reshape word vectors from Embedding to tensor format suitable for Convolutional layer
+    model.add(Reshape(dims=(1, conv_input_height, conv_input_width)))
     model.add(Convolution2D(27, 1, 3, 1, border_mode='valid', activation='relu'))
     model.add(Convolution2D(2048 , 27, 3, 300 , border_mode='valid',activation='relu'))
     model.add(MaxPooling2D(poolsize=(21, 1)))
