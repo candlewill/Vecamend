@@ -198,6 +198,7 @@ def result_analysis(filename):
     grid = ParameterGrid(param_grid)
     N=10         # top-n
     top_n_ind = np.argsort(param_fitness)[::-1][:N]         # top-n max value index
+
     for i in top_n_ind:
         print('Parameter setting: %s, acc: %s' % (str(list(grid)[i]), param_fitness[i]))
 

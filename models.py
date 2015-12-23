@@ -39,7 +39,7 @@ from keras.regularizers import l2
 '''
 
 
-def dan_pre_trained(weights=None):
+def dan(weights=None):
     '''
     DAN model with pre-trained embeddings
     :param max_features: the number of words
@@ -60,7 +60,7 @@ def dan_pre_trained(weights=None):
     model.add(Dense(input_dim=300, output_dim=2, activation = 'softmax', W_regularizer=l2(1e-5), b_regularizer=l2(1e-5)))
     return model
 
-def cnn_optimise(W):
+def cnn(W):
     # Number of feature maps (outputs of convolutional layer)
     N_fm = 300
     # kernel size of convolutional layer
@@ -70,7 +70,7 @@ def cnn_optimise(W):
 
     model = Sequential()
     # Embedding layer (lookup table of trainable word vectors)
-    model.add(Embedding(input_dim=W.shape[0], output_dim=W.shape[1], weights=[W], W_constraint=unitnorm(), init='uniform'))
+    model.add(Embedding(input_dim=W.shape[0], output_dim=W.shape[1], weights=[W], W_constraint=unitnorm()))
     # Reshape word vectors from Embedding to tensor format suitable for Convolutional layer
     model.add(Reshape(dims=(1, conv_input_height, conv_input_width)))
 
@@ -81,14 +81,27 @@ def cnn_optimise(W):
 
     # aggregate data in every feature map to scalar using MAX operation
     model.add(MaxPooling2D(pool_size=(conv_input_height-kernel_size+1, 1), border_mode='valid'))
-    model.add(Dropout(0.5))
+    model.add(Dropout(0.4))
     model.add(Flatten())
     model.add(Dense(output_dim=N_fm, activation = 'relu'))
-    model.add(Dropout(0.5))
+    model.add(Dropout(0.2))
     # Inner Product layer (as in regular neural network, but without non-linear activation function)
     model.add(Dense(output_dim=2, activation = 'softmax'))
     # SoftMax activation; actually, Dense+SoftMax works as Multinomial Logistic Regression
     return model
+
+def Deep_CNN ():
+    # Two Convolutional Layers with Pooling Layer
+    model = Sequential ()
+    model.add(Convolution2D(27, 1, 3, 1, border_mode='valid', activation='relu'))
+    model.add(Convolution2D(2048 , 27, 3, 300 , border_mode='valid',activation='relu'))
+    model.add(MaxPooling2D(poolsize=(21, 1)))
+    # Fully Connected Layer with dropout
+    model.add(Flatten())
+    model.add(Dense(2048 , 256 , activation='relu'))
+    model.add(Dropout(0.5))
+    # Fully Connected Layer as output layer
+    model.add(Dense(256 , 2, activation='sigmoid'))
 
 def hybrid_model(W):
     '''
@@ -174,7 +187,7 @@ def SA_sst():
     y_test = np_utils.to_categorical(y_test, nb_classes)
     y_valide = np_utils.to_categorical(y_valide, nb_classes)
 
-    model = dan_pre_trained(W)
+    model = cnn(W)
     plot(model, to_file='./images/model.png')
 
     # try using different optimizers and different optimizer configs
