@@ -91,6 +91,48 @@ def cnn(W=None):
     # SoftMax activation; actually, Dense+SoftMax works as Multinomial Logistic Regression
     return model
 
+def imdb_cnn(W=None):
+    # Number of feature maps (outputs of convolutional layer)
+    N_fm = 20
+    # kernel size of convolutional layer
+    kernel_size = 3
+    dims = 300   # 300 dimension
+    maxlen = 200     # maxlen of sentence
+    max_features = 5000
+    hidden_dims = 10
+    print('Build model...')
+    model = Sequential()
+
+    # we start off with an efficient embedding layer which maps
+    # our vocab indices into embedding_dims dimensions
+    model.add(Embedding(max_features, dims, input_length=maxlen))
+    model.add(Dropout(0.5))
+
+    # we add a Convolution1D, which will learn nb_filter
+    # word group filters of size filter_length:
+    model.add(Convolution1D(nb_filter=N_fm,
+                            filter_length=kernel_size,
+                            border_mode='valid',
+                            activation='relu',
+                            ))
+    model.add(Dropout(0.5))
+    # we use standard max pooling (halving the output of the previous layer):
+    model.add(MaxPooling1D(pool_length=kernel_size))
+
+    # We flatten the output of the conv layer,
+    # so that we can add a vanilla dense layer:
+    model.add(Flatten())
+
+    # We add a vanilla hidden layer:
+    model.add(Dense(hidden_dims))
+    model.add(Dropout(0.5))
+    model.add(Activation('relu'))
+
+    # We project onto a single unit output layer, and squash it with a sigmoid:
+    model.add(Dense(2))
+    model.add(Activation('softmax'))
+    return model
+
 def Deep_CNN(W):
     # Number of feature maps (outputs of convolutional layer)
     N_fm = 20
@@ -224,47 +266,9 @@ def SA_sst():
 def imdb_test():
     # set parameters:
     max_features = 5000 # number of vocabulary
-    maxlen = 100    # padding
-    batch_size = 32
-    embedding_dims = 100    # dim
-    nb_filter = 10
-    filter_length = 3
-    hidden_dims = 250   # number of hidden variables in dense layer
-    nb_epoch = 2
-
-    def models():
-        print('Build model...')
-        model = Sequential()
-
-        # we start off with an efficient embedding layer which maps
-        # our vocab indices into embedding_dims dimensions
-        model.add(Embedding(max_features, embedding_dims, input_length=maxlen))
-        model.add(Dropout(0.25))
-
-        # we add a Convolution1D, which will learn nb_filter
-        # word group filters of size filter_length:
-        model.add(Convolution1D(nb_filter=nb_filter,
-                                filter_length=filter_length,
-                                border_mode='valid',
-                                activation='relu',
-                                subsample_length=1))
-        # we use standard max pooling (halving the output of the previous layer):
-        model.add(MaxPooling1D(pool_length=2))
-
-        # We flatten the output of the conv layer,
-        # so that we can add a vanilla dense layer:
-        model.add(Flatten())
-
-        # We add a vanilla hidden layer:
-        model.add(Dense(hidden_dims))
-        model.add(Dropout(0.25))
-        model.add(Activation('relu'))
-
-        # We project onto a single unit output layer, and squash it with a sigmoid:
-        model.add(Dense(2))
-        model.add(Activation('softmax'))
-        return model
-
+    maxlen = 200    # padding
+    batch_size = 16
+    nb_epoch = 10
 
     print('Loading data...')
     (X_train, y_train), (X_test, y_test) = imdb.load_data(nb_words=max_features,
@@ -279,7 +283,7 @@ def imdb_test():
     y_train = np_utils.to_categorical(y_train, nb_classes)
     y_test = np_utils.to_categorical(y_test, nb_classes)
 
-    model = models()
+    model = imdb_cnn()
     plot(model, to_file='./images/imdb_model.png')
 
     # try using different optimizers and different optimizer configs
