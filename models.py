@@ -60,7 +60,7 @@ def dan(weights=None):
     model.add(Dense(input_dim=300, output_dim=2, activation = 'softmax', W_regularizer=l2(1e-5), b_regularizer=l2(1e-5)))
     return model
 
-def cnn(W):
+def cnn(W=None):
     # Number of feature maps (outputs of convolutional layer)
     N_fm = 20
     dense_nb = 20
@@ -206,7 +206,7 @@ def SA_sst():
     y_test = np_utils.to_categorical(y_test, nb_classes)
     y_valide = np_utils.to_categorical(y_valide, nb_classes)
 
-    model = Deep_CNN(W)
+    model = cnn(W)
     plot(model, to_file='./images/model.png')
 
     # try using different optimizers and different optimizer configs
@@ -221,6 +221,80 @@ def SA_sst():
     print('Test accuracy:', acc)
 
 
+def imdb_test():
+    # set parameters:
+    max_features = 5000 # number of vocabulary
+    maxlen = 100    # padding
+    batch_size = 32
+    embedding_dims = 100    # dim
+    nb_filter = 10
+    filter_length = 3
+    hidden_dims = 250   # number of hidden variables in dense layer
+    nb_epoch = 2
+
+    def models():
+        print('Build model...')
+        model = Sequential()
+
+        # we start off with an efficient embedding layer which maps
+        # our vocab indices into embedding_dims dimensions
+        model.add(Embedding(max_features, embedding_dims, input_length=maxlen))
+        model.add(Dropout(0.25))
+
+        # we add a Convolution1D, which will learn nb_filter
+        # word group filters of size filter_length:
+        model.add(Convolution1D(nb_filter=nb_filter,
+                                filter_length=filter_length,
+                                border_mode='valid',
+                                activation='relu',
+                                subsample_length=1))
+        # we use standard max pooling (halving the output of the previous layer):
+        model.add(MaxPooling1D(pool_length=2))
+
+        # We flatten the output of the conv layer,
+        # so that we can add a vanilla dense layer:
+        model.add(Flatten())
+
+        # We add a vanilla hidden layer:
+        model.add(Dense(hidden_dims))
+        model.add(Dropout(0.25))
+        model.add(Activation('relu'))
+
+        # We project onto a single unit output layer, and squash it with a sigmoid:
+        model.add(Dense(2))
+        model.add(Activation('softmax'))
+        return model
+
+
+    print('Loading data...')
+    (X_train, y_train), (X_test, y_test) = imdb.load_data(nb_words=max_features,
+                                                          test_split=0.2)
+
+    print("Pad sequences (samples x time)")
+    X_train = sequence.pad_sequences(X_train, maxlen=maxlen)
+    X_test = sequence.pad_sequences(X_test, maxlen=maxlen)
+    print('X_train shape:', X_train.shape)
+    print('X_test shape:', X_test.shape)
+    nb_classes = 2
+    y_train = np_utils.to_categorical(y_train, nb_classes)
+    y_test = np_utils.to_categorical(y_test, nb_classes)
+
+    model = models()
+    plot(model, to_file='./images/imdb_model.png')
+
+    # try using different optimizers and different optimizer configs
+    # model.compile(loss='binary_crossentropy', optimizer='adagrad', class_mode="binary")
+    model.compile(loss='categorical_crossentropy', optimizer='adagrad')
+
+    print("Train...")
+    early_stopping = EarlyStopping(monitor='val_loss', patience=10)
+    model.fit(X_train, y_train, batch_size=batch_size, nb_epoch=nb_epoch, validation_data=(X_test, y_test), show_accuracy=True, callbacks=[early_stopping])
+    score, acc = model.evaluate(X_test, y_test, batch_size=batch_size, show_accuracy=True)
+    print('Test score:', score)
+    print('Test accuracy:', acc)
+
 
 if __name__ == "__main__":
+    imdb_test()
+    exit()
     SA_sst()
