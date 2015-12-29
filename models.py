@@ -146,7 +146,7 @@ def imdb_cnn_sts(W=None):
     dims = 300  # 300 dimension
     maxlen = 200  # maxlen of sentence
     max_features = W.shape[0]
-    hidden_dims = 10
+    hidden_dims = 20
     print('Build model...')
     model = Sequential()
 
@@ -191,19 +191,20 @@ def Deep_CNN(W):
 
     # Two Convolutional Layers with Pooling Layer
     model = Sequential()
-    model.add(Embedding(input_dim=W.shape[0], output_dim=W.shape[1], weights=[W], W_constraint=unitnorm()))
+    model.add(Embedding(input_dim=W.shape[0], output_dim=W.shape[1], weights=[W]))
     # Reshape word vectors from Embedding to tensor format suitable for Convolutional layer
     model.add(Reshape(dims=(1, conv_input_height, conv_input_width)))
     model.add(Convolution2D(nb_filter=N_fm, nb_row=kernel_size, nb_col=conv_input_width, border_mode='valid',
                             activation='relu'))
-    model.add(Dropout(0.4))
-    model.add(Convolution2D(nb_filter=N_fm, nb_row=kernel_size, nb_col=1, border_mode='valid', activation='relu'))
-    model.add(Dropout(0.3))
-    model.add(Convolution2D(nb_filter=N_fm, nb_row=kernel_size, nb_col=1, border_mode='valid', activation='relu'))
-    model.add(Dropout(0.2))
+    model.add(Dropout(0.5))
+    # model.add(Convolution2D(nb_filter=N_fm, nb_row=kernel_size, nb_col=1, border_mode='valid', activation='relu'))
+    # model.add(Dropout(0.5))
+    # model.add(Convolution2D(nb_filter=N_fm, nb_row=kernel_size, nb_col=1, border_mode='valid', activation='relu'))
+    # model.add(Dropout(0.5))
+    model.add(MaxPooling2D(pool_size=(kernel_size, 1)))
     model.add(Flatten())
     model.add(Dense(output_dim=N_fm, activation='relu'))
-    model.add(Dropout(0.1))
+    model.add(Dropout(0.5))
     # Fully Connected Layer as output layer
     model.add(Dense(output_dim=2, activation='softmax'))
     return model
@@ -331,7 +332,7 @@ def SA_sst():
     y_test = np_utils.to_categorical(y_test, nb_classes)
     y_valide = np_utils.to_categorical(y_valide, nb_classes)
 
-    model = imdb_cnn_sts(W)
+    model = Deep_CNN(W)
     plot(model, to_file='./images/model.png')
 
     # try using different optimizers and different optimizer configs
