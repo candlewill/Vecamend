@@ -98,19 +98,61 @@ def cnn(W=None):
 
 def imdb_cnn(W=None):
     # Number of feature maps (outputs of convolutional layer)
-    N_fm = 20
+    N_fm = 60
     # kernel size of convolutional layer
     kernel_size = 3
     dims = 300  # 300 dimension
     maxlen = 200  # maxlen of sentence
     max_features = 5000
+    hidden_dims = 100
+    print('Build model...')
+    model = Sequential()
+
+    # we start off with an efficient embedding layer which maps
+    # our vocab indices into embedding_dims dimensions
+    model.add(Embedding(max_features, dims, input_length=maxlen, weights=[W]))
+    model.add(Dropout(0.5))
+
+    # we add a Convolution1D, which will learn nb_filter
+    # word group filters of size filter_length:
+    model.add(Convolution1D(nb_filter=N_fm,
+                            filter_length=kernel_size,
+                            border_mode='valid',
+                            activation='relu',
+                            ))
+    model.add(Dropout(0.5))
+    # we use standard max pooling (halving the output of the previous layer):
+    model.add(MaxPooling1D(pool_length=kernel_size*7))
+
+    # We flatten the output of the conv layer,
+    # so that we can add a vanilla dense layer:
+    model.add(Flatten())
+
+    # We add a vanilla hidden layer:
+    model.add(Dense(hidden_dims))
+    model.add(Dropout(0.5))
+    model.add(Activation('relu'))
+
+    # We project onto a single unit output layer, and squash it with a sigmoid:
+    model.add(Dense(2))
+    model.add(Activation('softmax'))
+    return model
+
+def imdb_cnn_sts(W=None):
+    # Number of feature maps (outputs of convolutional layer)
+    N_fm = 20
+    # kernel size of convolutional layer
+    kernel_size = 3
+    dims = 300  # 300 dimension
+    maxlen = 200  # maxlen of sentence
+    max_features = W.shape[0]
     hidden_dims = 10
     print('Build model...')
     model = Sequential()
 
     # we start off with an efficient embedding layer which maps
     # our vocab indices into embedding_dims dimensions
-    model.add(Embedding(max_features, dims, input_length=maxlen))
+    model.add(Embedding(max_features, dims, input_length=maxlen, weights=[W]))
     model.add(Dropout(0.5))
 
     # we add a Convolution1D, which will learn nb_filter
@@ -232,15 +274,15 @@ def parallel_cnn(W):
     filter_shapes = [[2, 300], [3, 300], [4, 300], [5, 300]]
     pool_shapes = [[25, 1], [24, 1], [23, 1], [22, 1]]  # Four Parallel Convolutional Layers with Four Pooling Layers
     model = Sequential()
-    model.add(Embedding(input_dim=W.shape[0], output_dim=W.shape[1], weights=[W], W_constraint=unitnorm()))
-    # Reshape word vectors from Embedding to tensor format suitable for Convolutional layer
-    model.add(Reshape(dims=(1, 200, dims)))
     sub_models = []
     for i in range(len(pool_shapes)):
         pool_shape = pool_shapes[i]
         filter_shape = filter_shapes[i]
         sub_model = Sequential()
-        sub_model.add(Convolution2D(input_shape=(1, 200, dims),nb_filter=N_filter, nb_row=filter_shape[0], nb_col=filter_shape[1], border_mode = 'valid', activation = 'relu'))
+        sub_model.add(Embedding(input_dim=nb_vocab, output_dim=dims, weights=[W], W_constraint=unitnorm()))
+        # Reshape word vectors from Embedding to tensor format suitable for Convolutional layer
+        sub_model.add(Reshape(dims=(1, 200, dims)))
+        sub_model.add(Convolution2D(nb_filter=N_filter, nb_row=filter_shape[0], nb_col=filter_shape[1], border_mode = 'valid', activation = 'relu'))
         sub_model.add(MaxPooling2D(pool_size=(pool_shape[0], pool_shape[1]), border_mode='valid'))
         sub_model.add(Flatten())
         sub_models.append(sub_model)
@@ -289,7 +331,7 @@ def SA_sst():
     y_test = np_utils.to_categorical(y_test, nb_classes)
     y_valide = np_utils.to_categorical(y_valide, nb_classes)
 
-    model = parallel_cnn(W)
+    model = imdb_cnn_sts(W)
     plot(model, to_file='./images/model.png')
 
     # try using different optimizers and different optimizer configs
@@ -298,7 +340,7 @@ def SA_sst():
 
     print("Train...")
     early_stopping = EarlyStopping(monitor='val_loss', patience=10)
-    model.fit(X_train, y_train, batch_size=batch_size, nb_epoch=3, validation_data=(X_test, y_test), show_accuracy=True,
+    model.fit(X_train, y_train, batch_size=batch_size, nb_epoch=20, validation_data=(X_test, y_test), show_accuracy=True,
               callbacks=[early_stopping])
     score, acc = model.evaluate(X_test, y_test, batch_size=batch_size, show_accuracy=True)
     print('Test score:', score)
