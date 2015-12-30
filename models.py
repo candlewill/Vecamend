@@ -183,7 +183,7 @@ def imdb_cnn_sts(W=None):
 
 def Deep_CNN(W):
     # Number of feature maps (outputs of convolutional layer)
-    N_fm = 20
+    N_fm = 32
     # kernel size of convolutional layer
     kernel_size = 3
     conv_input_width = W.shape[1]  # 300 dimension
@@ -201,7 +201,7 @@ def Deep_CNN(W):
     # model.add(Dropout(0.5))
     # model.add(Convolution2D(nb_filter=N_fm, nb_row=kernel_size, nb_col=1, border_mode='valid', activation='relu'))
     # model.add(Dropout(0.5))
-    model.add(MaxPooling2D(pool_size=(kernel_size, 1)))
+    model.add(MaxPooling2D(pool_size=(2, 1)))
     model.add(Flatten())
     model.add(Dense(output_dim=N_fm, activation='relu'))
     model.add(Dropout(0.5))
@@ -307,7 +307,7 @@ def SA_sst():
       x_valid_polarity_idx_data, y_valid_polarity), W) = build_keras_input()
 
     maxlen = 200  # cut texts after this number of words (among top max_features most common words)
-    batch_size = 32
+    batch_size = 16
     (X_train, y_train), (X_test, y_test), (X_valid, y_valide) = (x_train_polarity_idx_data, y_train_polarity), (
     x_test_polarity_idx_data, y_test_polarity), (x_valid_polarity_idx_data, y_valid_polarity)
     print(len(X_train), 'train sequences')
@@ -337,7 +337,8 @@ def SA_sst():
 
     # try using different optimizers and different optimizer configs
     # model.compile(loss='binary_crossentropy', optimizer='adagrad', class_mode="binary")
-    model.compile(loss='categorical_crossentropy', optimizer='adagrad')
+    sgd = SGD(lr=0.1, decay=1e-6, momentum=0.9, nesterov=True)
+    model.compile(loss='categorical_crossentropy', optimizer='adagrad')   # adagrad
 
     print("Train...")
     early_stopping = EarlyStopping(monitor='val_loss', patience=10)
