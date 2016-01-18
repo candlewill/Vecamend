@@ -103,7 +103,7 @@ def imdb_cnn(W=None):
     kernel_size = 3
     dims = 300  # 300 dimension
     maxlen = 200  # maxlen of sentence
-    max_features = 5000
+    max_features = W.shape[0]
     hidden_dims = 100
     print('Build model...')
     model = Sequential()
@@ -341,7 +341,7 @@ def SA_sst():
     model.compile(loss='categorical_crossentropy', optimizer='adagrad')   # adagrad
 
     print("Train...")
-    early_stopping = EarlyStopping(monitor='val_loss', patience=10)
+    early_stopping = EarlyStopping(monitor='val_loss', patience=5)
     model.fit(X_train, y_train, batch_size=batch_size, nb_epoch=20, validation_data=(X_test, y_test), show_accuracy=True,
               callbacks=[early_stopping])
     score, acc = model.evaluate(X_test, y_test, batch_size=batch_size, show_accuracy=True)
@@ -377,7 +377,7 @@ def imdb_test():
     model.compile(loss='categorical_crossentropy', optimizer='adagrad')
 
     print("Train...")
-    early_stopping = EarlyStopping(monitor='val_loss', patience=10)
+    early_stopping = EarlyStopping(monitor='val_loss', patience=5)
     model.fit(X_train, y_train, batch_size=batch_size, nb_epoch=nb_epoch, validation_data=(X_test, y_test),
               show_accuracy=True, callbacks=[early_stopping])
     score, acc = model.evaluate(X_test, y_test, batch_size=batch_size, show_accuracy=True)
