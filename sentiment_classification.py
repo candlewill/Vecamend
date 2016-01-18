@@ -173,4 +173,4 @@ if __name__ == '__main__':
     #  x_train_polarity_idx_data, y_train_polarity,
     #  x_test_polarity_idx_data, y_test_polarity,
      # x_valid_polarity_idx_data, y_valid_polarity), W) = build_keras_input()
-    build_keras_input_amended()
+    build_keras_input_amended()         # using amended word2vec
