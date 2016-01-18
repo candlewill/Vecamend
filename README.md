@@ -179,6 +179,16 @@ DAN for binary SA:
 
 
 
+##### Images
+
+Before Amending
+
+[Before Amending](./images/amended.png)
+
+After Amending
+
+[After Amending](./images/no_amended.png)
+
 ### Important Dependencies
 
 * Python 3.4.3
