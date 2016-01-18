@@ -1,6 +1,7 @@
 from __future__ import absolute_import
 from __future__ import print_function
 import numpy as np
+
 np.random.seed(1337)  # for reproducibility
 
 from keras.preprocessing import sequence
@@ -37,7 +38,6 @@ from keras.utils.visualize_util import plot
 '''
 
 
-
 def dan_original(max_features):
     '''
     DAN model
@@ -48,14 +48,15 @@ def dan_original(max_features):
     model = Sequential()
     model.add(Embedding(max_features, 300))
     model.add(TimeDistributedMerge(mode='ave'))
-    model.add(Dense(input_dim=300, output_dim=300, activation = 'relu'))
+    model.add(Dense(input_dim=300, output_dim=300, activation='relu'))
     model.add(Dropout(.5))
-    model.add(Dense(input_dim=300, output_dim=300, activation = 'relu'))
+    model.add(Dense(input_dim=300, output_dim=300, activation='relu'))
     model.add(Dropout(.5))
-    model.add(Dense(input_dim=300, output_dim=300, activation = 'relu'))
+    model.add(Dense(input_dim=300, output_dim=300, activation='relu'))
     model.add(Dropout(.5))
-    model.add(Dense(input_dim=300, output_dim=1, activation = 'sigmoid'))
+    model.add(Dense(input_dim=300, output_dim=1, activation='sigmoid'))
     return model
+
 
 def dan_pre_trained(max_features, weights=None):
     '''
@@ -65,16 +66,17 @@ def dan_pre_trained(max_features, weights=None):
     '''
     print('Build model...')
     model = Sequential()
-    model.add(Embedding(input_dim = max_features, output_dim = 300, weights=[weights]))
+    model.add(Embedding(input_dim=max_features, output_dim=300, weights=[weights]))
     model.add(TimeDistributedMerge(mode='ave'))
-    model.add(Dense(input_dim=300, output_dim=300, activation = 'relu'))
+    model.add(Dense(input_dim=300, output_dim=300, activation='relu'))
     model.add(Dropout(.5))
-    model.add(Dense(input_dim=300, output_dim=300, activation = 'relu'))
+    model.add(Dense(input_dim=300, output_dim=300, activation='relu'))
     model.add(Dropout(.5))
-    model.add(Dense(input_dim=300, output_dim=300, activation = 'relu'))
+    model.add(Dense(input_dim=300, output_dim=300, activation='relu'))
     model.add(Dropout(.5))
-    model.add(Dense(input_dim=300, output_dim=1, activation = 'sigmoid'))
+    model.add(Dense(input_dim=300, output_dim=1, activation='sigmoid'))
     return model
+
 
 def dan_simplified(max_features, weights=None):
     '''
@@ -84,12 +86,13 @@ def dan_simplified(max_features, weights=None):
     '''
     print('Build model...')
     model = Sequential()
-    model.add(Embedding(input_dim = max_features, output_dim = 300, weights=[weights]))
+    model.add(Embedding(input_dim=max_features, output_dim=300, weights=[weights]))
     model.add(TimeDistributedMerge(mode='ave'))
-    model.add(Dense(input_dim=300, output_dim=300, activation = 'relu'))
+    model.add(Dense(input_dim=300, output_dim=300, activation='relu'))
     model.add(Dropout(.5))
-    model.add(Dense(input_dim=300, output_dim=1, activation = 'sigmoid'))
+    model.add(Dense(input_dim=300, output_dim=1, activation='sigmoid'))
     return model
+
 
 def dan_dropout(max_features, weights=None):
     '''
@@ -99,13 +102,14 @@ def dan_dropout(max_features, weights=None):
     '''
     print('Build model...')
     model = Sequential()
-    model.add(Embedding(input_dim = max_features, output_dim = 300, weights=[weights]))
+    model.add(Embedding(input_dim=max_features, output_dim=300, weights=[weights]))
     model.add(Dropout(.5))
     model.add(TimeDistributedMerge(mode='ave'))
-    model.add(Dense(input_dim=300, output_dim=300, activation = 'relu'))
+    model.add(Dense(input_dim=300, output_dim=300, activation='relu'))
     model.add(Dropout(.5))
-    model.add(Dense(input_dim=300, output_dim=1, activation = 'sigmoid'))
+    model.add(Dense(input_dim=300, output_dim=1, activation='sigmoid'))
     return model
+
 
 def dan_dropout_p(weights=None):
     '''
@@ -116,13 +120,14 @@ def dan_dropout_p(weights=None):
     max_features = weights.shape[0]
     print('Build model...')
     model = Sequential()
-    model.add(Embedding(input_dim = max_features, output_dim = 300, weights=[weights]))
+    model.add(Embedding(input_dim=max_features, output_dim=300, weights=[weights]))
     model.add(TimeDistributedMerge(mode='ave'))
     model.add(Dropout(.5))
-    model.add(Dense(input_dim=300, output_dim=300, activation = 'relu'))
+    model.add(Dense(input_dim=300, output_dim=300, activation='relu'))
     model.add(Dropout(.5))
-    model.add(Dense(input_dim=300, output_dim=1, activation = 'sigmoid'))
+    model.add(Dense(input_dim=300, output_dim=1, activation='sigmoid'))
     return model
+
 
 def dan_dropout_position(weights=None):
     '''
@@ -133,13 +138,14 @@ def dan_dropout_position(weights=None):
     max_features = weights.shape[0]
     print('Build model...')
     model = Sequential()
-    model.add(Embedding(input_dim = max_features, output_dim = 300, weights=[weights]))
+    model.add(Embedding(input_dim=max_features, output_dim=300, weights=[weights]))
     model.add(TimeDistributedMerge(mode='ave'))
     model.add(Dropout(.5))
-    model.add(Dense(input_dim=300, output_dim=300, activation = 'relu'))
+    model.add(Dense(input_dim=300, output_dim=300, activation='relu'))
     model.add(Dropout(.5))
-    model.add(Dense(input_dim=300, output_dim=1, activation = 'sigmoid'))
+    model.add(Dense(input_dim=300, output_dim=1, activation='sigmoid'))
     return model
+
 
 def cnn(W):
     # Number of feature maps (outputs of convolutional layer)
@@ -147,7 +153,7 @@ def cnn(W):
     # kernel size of convolutional layer
     kernel_size = 8
     conv_input_width = W.shape[1]
-    conv_input_height = 200     # maxlen of sentence
+    conv_input_height = 200  # maxlen of sentence
 
     model = Sequential()
     # Embedding layer (lookup table of trainable word vectors)
@@ -161,7 +167,7 @@ def cnn(W):
     model.add(Activation('relu'))
 
     # aggregate data in every feature map to scalar using MAX operation
-    model.add(MaxPooling2D(pool_size=(conv_input_height-kernel_size+1, 1), ignore_border=True))
+    model.add(MaxPooling2D(pool_size=(conv_input_height - kernel_size + 1, 1), ignore_border=True))
 
     model.add(Flatten())
     model.add(Dropout(0.5))
@@ -174,13 +180,14 @@ def cnn(W):
 
     return model
 
+
 def cnn_simplified(W):
     # Number of feature maps (outputs of convolutional layer)
     N_fm = 300
     # kernel size of convolutional layer
     kernel_size = 8
     conv_input_width = W.shape[1]
-    conv_input_height = 200     # maxlen of sentence
+    conv_input_height = 200  # maxlen of sentence
 
     model = Sequential()
     # Embedding layer (lookup table of trainable word vectors)
@@ -194,7 +201,7 @@ def cnn_simplified(W):
     model.add(Activation('relu'))
 
     # aggregate data in every feature map to scalar using MAX operation
-    model.add(MaxPooling2D(pool_size=(conv_input_height-kernel_size+1, 1), border_mode='valid'))
+    model.add(MaxPooling2D(pool_size=(conv_input_height - kernel_size + 1, 1), border_mode='valid'))
 
     model.add(Flatten())
     model.add(Dropout(0.5))
@@ -204,17 +211,19 @@ def cnn_simplified(W):
     model.add(Activation('sigmoid'))
     return model
 
+
 def cnn_optimise(W):
     # Number of feature maps (outputs of convolutional layer)
     N_fm = 300
     # kernel size of convolutional layer
     kernel_size = 8
     conv_input_width = W.shape[1]
-    conv_input_height = 200     # maxlen of sentence
+    conv_input_height = 200  # maxlen of sentence
 
     model = Sequential()
     # Embedding layer (lookup table of trainable word vectors)
-    model.add(Embedding(input_dim=W.shape[0], output_dim=W.shape[1], weights=[W], W_constraint=unitnorm(), init='uniform'))
+    model.add(
+        Embedding(input_dim=W.shape[0], output_dim=W.shape[1], weights=[W], W_constraint=unitnorm(), init='uniform'))
     # Reshape word vectors from Embedding to tensor format suitable for Convolutional layer
     model.add(Reshape(dims=(1, conv_input_height, conv_input_width)))
 
@@ -225,7 +234,7 @@ def cnn_optimise(W):
     model.add(Activation('relu'))
 
     # aggregate data in every feature map to scalar using MAX operation
-    model.add(MaxPooling2D(pool_size=(conv_input_height-kernel_size+1, 1), border_mode='valid'))
+    model.add(MaxPooling2D(pool_size=(conv_input_height - kernel_size + 1, 1), border_mode='valid'))
     model.add(Dropout(0.5))
     model.add(Flatten())
 
@@ -236,6 +245,7 @@ def cnn_optimise(W):
     plot(model, to_file='./images/model.png')
     return model
 
+
 def test_dan_original():
     max_features = 20000
     maxlen = 100  # cut texts after this number of words (among top max_features most common words)
@@ -245,7 +255,6 @@ def test_dan_original():
     (X_train, y_train), (X_test, y_test) = imdb.load_data(nb_words=max_features, test_split=0.2)
     print(len(X_train), 'train sequences')
     print(len(X_test), 'test sequences')
-
 
     print("Pad sequences (samples x time)")
     X_train = sequence.pad_sequences(X_train, maxlen=maxlen)
@@ -264,18 +273,19 @@ def test_dan_original():
     print('Test score:', score)
     print('Test accuracy:', acc)
 
+
 def SA_sst():
     ((x_train_idx_data, y_train_valence, y_train_labels,
-     x_test_idx_data, y_test_valence, y_test_labels,
-     x_valid_idx_data, y_valid_valence, y_valid_labels,
-     x_train_polarity_idx_data, y_train_polarity,
-     x_test_polarity_idx_data, y_test_polarity,
-     x_valid_polarity_idx_data, y_valid_polarity), W) = build_keras_input()
-
+      x_test_idx_data, y_test_valence, y_test_labels,
+      x_valid_idx_data, y_valid_valence, y_valid_labels,
+      x_train_polarity_idx_data, y_train_polarity,
+      x_test_polarity_idx_data, y_test_polarity,
+      x_valid_polarity_idx_data, y_valid_polarity), W) = build_keras_input()
 
     maxlen = 200  # cut texts after this number of words (among top max_features most common words)
     batch_size = 32
-    (X_train, y_train), (X_test, y_test), (X_valid, y_valide) = (x_train_polarity_idx_data, y_train_polarity), (x_test_polarity_idx_data, y_test_polarity), (x_valid_polarity_idx_data, y_valid_polarity)
+    (X_train, y_train), (X_test, y_test), (X_valid, y_valide) = (x_train_polarity_idx_data, y_train_polarity), (
+    x_test_polarity_idx_data, y_test_polarity), (x_valid_polarity_idx_data, y_valid_polarity)
     print(len(X_train), 'train sequences')
     print(len(X_test), 'test sequences')
     # m= 0
@@ -285,7 +295,7 @@ def SA_sst():
     #             if j > m:
     #                 m=j
     # print(m)
-    max_features = W.shape[0] # shape of W: (13631, 300)
+    max_features = W.shape[0]  # shape of W: (13631, 300)
 
     print("Pad sequences (samples x time)")
     X_train = sequence.pad_sequences(X_train, maxlen=maxlen)
@@ -299,11 +309,11 @@ def SA_sst():
     model.compile(loss='binary_crossentropy', optimizer='adagrad', class_mode="binary")
 
     print("Train...")
-    model.fit(X_train, y_train, batch_size=batch_size, nb_epoch=30, validation_data=(X_test, y_test), show_accuracy=True)
+    model.fit(X_train, y_train, batch_size=batch_size, nb_epoch=30, validation_data=(X_test, y_test),
+              show_accuracy=True)
     score, acc = model.evaluate(X_test, y_test, batch_size=batch_size, show_accuracy=True)
     print('Test score:', score)
     print('Test accuracy:', acc)
-
 
 
 if __name__ == "__main__":
