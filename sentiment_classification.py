@@ -242,8 +242,8 @@ def keras_nn_input(word_vectors_model, amending):
 def nn_input(word_vectors_model = 'word2vec', amending = False):
 
     ###################################### Hyper-parameters #######################################
-    word_vectors_model = 'word2vec'      # values: 'word2vec', 'GloVe'
-    amending = False                         # values: True, False
+    word_vectors_model = 'GloVe'      # values: 'word2vec', 'GloVe'
+    amending = True                         # values: True, False
     ###############################################################################################
     data = keras_nn_input(word_vectors_model, amending)
     return data
