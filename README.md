@@ -183,11 +183,11 @@ DAN for binary SA:
 
 Before Amending
 
-[Before Amending](./images/amended.png)
+<p align="center"> <img src="./images/amended.png" height="300" /> </p>
 
 After Amending
 
-[After Amending](./images/no_amended.png)
+<p align="center"> <img src="./images/no_amended.png" height="300" /> </p>
 
 ### Important Dependencies
 
