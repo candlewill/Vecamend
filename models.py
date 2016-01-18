@@ -13,7 +13,7 @@ from keras.layers.embeddings import Embedding
 from keras.layers.recurrent import LSTM, GRU
 from keras.datasets import imdb
 from keras.constraints import unitnorm
-from sentiment_classification import build_keras_input, build_keras_input_amended
+from sentiment_classification import build_keras_input, build_keras_input_amended, nn_input
 from keras.layers.core import Reshape, Flatten, Merge
 from keras.layers.convolutional import Convolution2D, MaxPooling2D, Convolution1D, MaxPooling1D
 from keras.regularizers import l2
@@ -304,7 +304,7 @@ def SA_sst():
       x_valid_idx_data, y_valid_valence, y_valid_labels,
       x_train_polarity_idx_data, y_train_polarity,
       x_test_polarity_idx_data, y_test_polarity,
-      x_valid_polarity_idx_data, y_valid_polarity), W) = build_keras_input_amended()                    #  build_keras_input_amended or build_keras_input
+      x_valid_polarity_idx_data, y_valid_polarity), W) = nn_input()                    #  build_keras_input_amended or build_keras_input
 
     maxlen = 200  # cut texts after this number of words (among top max_features most common words)
     batch_size = 16
