@@ -194,5 +194,6 @@ After Amending
 * Python 3.4.3
 * Keras 0.3.0
 * pydot2 1.0.33 (for model visualization)
+* os Ubuntu 15.04
 
 There are some frequent questions and answers in [Q&A.md](./resources/Q&A.md) file. If you have any other questions or advice, any feedback is welcomed.
