@@ -112,6 +112,20 @@ def load_embeddings(arg=None, filename='None'):
                 except:
                     pass
         return model
+    elif arg == 'amended_word2vec':
+        model = gensim.models.Word2Vec.load_word2vec_format('/home/hs/Data/Word_Embeddings/google_news.bin', binary=True)  # C binary format
+        w2v = dict()
+        for key in model.vocab.keys():
+            w2v[key]=model[key]
+        pos_vecs = load_pickle('./tmp/amended_pos.p')
+        neg_vecs = load_pickle('./tmp/amended_neg.p')
+        for p in pos_vecs:
+            w2v[p] = pos_vecs[p]
+        for n in neg_vecs:
+            w2v[n] = neg_vecs[n]
+        print('Using amended word vectors.')
+        return w2v
+
     elif arg == 'CVAT':  # dim = 50
         model = gensim.models.Word2Vec.load(None)
     elif arg == 'twitter':  # dim = 50
