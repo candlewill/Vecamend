@@ -60,9 +60,10 @@ def amend(pos_vectors, neg_vectors):
 
     return amended_pos, amended_neg
 
-def build_amended_vectors():
-    pos_vectors = load_pickle('./tmp/common_positive_words.p')
-    neg_vectors = load_pickle('./tmp/common_negative_words.p')
+def build_amended_vectors(arg='word2vec'):
+    prefix = None if arg == 'word2vec' else 'GloVe_'
+    pos_vectors = load_pickle('./tmp/'+prefix+'common_positive_words.p')
+    neg_vectors = load_pickle('./tmp/'+prefix+'common_negative_words.p')
     size = len(pos_vectors[list(pos_vectors.keys())[0]])
     print('The dimension of word vectors: %s.' % size)
     for k in pos_vectors:
@@ -70,8 +71,8 @@ def build_amended_vectors():
     for k in neg_vectors:
         neg_vectors[k]=np.array(neg_vectors[k]).reshape((1, size))
     amended_pos, amended_neg = amend(pos_vectors, neg_vectors)
-    dump_picle(amended_pos, './tmp/amended_pos.p')
-    dump_picle(amended_neg, './tmp/amended_neg.p')
+    dump_picle(amended_pos, './tmp/amended_'+prefix+'pos.p')
+    dump_picle(amended_neg, './tmp/amended_'+prefix+'neg.p')
 
 if __name__=='__main__':
-    build_amended_vectors()
+    build_amended_vectors(arg='GloVe')           # arg values: word2vec, GloVe

@@ -165,6 +165,88 @@ def build_keras_input_amended():
     dump_picle(W, filename_w)
     return (data, W)
 
+def keras_nn_input(word_vectors_model, amending):
+    if word_vectors_model == 'word2vec':
+        if amending == True:
+            filename_data, filename_w = './tmp/amended_w2v_indexed_data.p', './tmp/amended_w2v_Weight.p'
+        elif amending == False:
+            filename_data, filename_w = './tmp/w2v_indexed_data.p', './tmp/w2v_Weight.p'
+        else:
+            raise Exception('Wrong!')
+    elif word_vectors_model == 'GloVe':
+        if amending == True:
+            filename_data, filename_w = './tmp/amended_GloVe_indexed_data.p', './tmp/amended_GloVe_Weight.p'
+        elif amending == False:
+            filename_data, filename_w = './tmp/GloVe_indexed_data.p', './tmp/GloVe_Weight.p'
+        else:
+            raise Exception('Wrong!')
+    else:
+        raise Exception('Wrong parameter!')
+
+    if os.path.isfile(filename_data) and os.path.isfile(filename_w):
+        data = load_pickle(filename_data)
+        W = load_pickle(filename_w)
+        print('Load OK, parameters: word_vectors_model = %s, amending = %s'%(word_vectors_model, amending))
+        return (data, W)
+
+    # load data from pickle
+    (x_train, y_train_valence, y_train_labels,
+     x_test, y_test_valence, y_test_labels,
+     x_valid, y_valid_valence, y_valid_labels,
+     x_train_polarity, y_train_polarity,
+     x_test_polarity, y_test_polarity,
+     x_valid_polarity, y_valid_polarity) = load_sst(path='./resources/stanfordSentimentTreebank/')
+
+    vocab = get_vocab(x_train)
+
+    if word_vectors_model == 'word2vec':
+        if amending == True:
+            word_vecs = load_embeddings('amended_word2vec')
+        elif amending == False:
+            word_vecs = load_embeddings('google_news', '/home/hs/Data/Word_Embeddings/google_news.bin')
+        else:
+            raise Exception('Wrong!')
+    elif word_vectors_model == 'GloVe':
+        if amending == True:
+            word_vecs = load_embeddings('amended_glove')
+        elif amending == False:
+            word_vecs = load_embeddings('glove')
+        else:
+            raise Exception('Wrong!')
+    else:
+        raise Exception('Wrong parameter!')
+
+    word_vecs = add_unknown_words(word_vecs, vocab)
+    W, word_idx_map = build_embedding_matrix(word_vecs, vocab)
+
+    x_train_idx_data = make_idx_data(x_train, word_idx_map)
+    x_test_idx_data = make_idx_data(x_test, word_idx_map)
+    x_valid_idx_data = make_idx_data(x_valid, word_idx_map)
+    x_train_polarity_idx_data = make_idx_data(x_train_polarity, word_idx_map)
+    x_test_polarity_idx_data = make_idx_data(x_test_polarity, word_idx_map)
+    x_valid_polarity_idx_data = make_idx_data(x_valid_polarity, word_idx_map)
+
+    data = (x_train_idx_data, y_train_valence, y_train_labels,
+            x_test_idx_data, y_test_valence, y_test_labels,
+            x_valid_idx_data, y_valid_valence, y_valid_labels,
+            x_train_polarity_idx_data, y_train_polarity,
+            x_test_polarity_idx_data, y_test_polarity,
+            x_valid_polarity_idx_data, y_valid_polarity)
+
+    dump_picle(data, filename_data)
+    dump_picle(W, filename_w)
+    print('Load OK, parameters: word_vectors_model = %s, amending = %s'%(word_vectors_model, amending))
+    return (data, W)
+
+
+def nn_input():
+
+    ###################################### Hyper-parameters #######################################
+    word_vectors_model = 'word2vec'      # values: 'word2vec', 'GloVe'
+    amending = False                    # values: True, False
+    ###############################################################################################
+    data = keras_nn_input(word_vectors_model, amending)
+    return data
 
 if __name__ == '__main__':
     # ((x_train_idx_data, y_train_valence, y_train_labels,
@@ -172,5 +254,9 @@ if __name__ == '__main__':
     #  x_valid_idx_data, y_valid_valence, y_valid_labels,
     #  x_train_polarity_idx_data, y_train_polarity,
     #  x_test_polarity_idx_data, y_test_polarity,
-     # x_valid_polarity_idx_data, y_valid_polarity), W) = build_keras_input()
-    build_keras_input_amended()         # using amended word2vec
+    # x_valid_polarity_idx_data, y_valid_polarity), W) = build_keras_input()
+    # build_keras_input_amended()         # using amended word2vec
+    nn_input()
+
+
+

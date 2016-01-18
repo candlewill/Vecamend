@@ -97,7 +97,7 @@ def load_embeddings(arg=None, filename='None'):
         model = gensim.models.Word2Vec.load_word2vec_format(filename, binary=True)  # C binary format
         w2v = dict()
         for key in model.vocab.keys():
-            w2v[key]=model[key]
+            w2v[key] = model[key]
         return w2v
     elif arg == 'glove':
         glove_path = '/home/hs/Data/Word_Embeddings/glove.840B.300d.txt'
@@ -108,15 +108,16 @@ def load_embeddings(arg=None, filename='None'):
                 # print(line[0])
                 # split = line.split()
                 try:
-                    model[line[0]]=np.array(line[1:], dtype=float)
+                    model[line[0]] = np.array(line[1:], dtype=float)
                 except:
                     pass
         return model
     elif arg == 'amended_word2vec':
-        model = gensim.models.Word2Vec.load_word2vec_format('/home/hs/Data/Word_Embeddings/google_news.bin', binary=True)  # C binary format
+        model = gensim.models.Word2Vec.load_word2vec_format('/home/hs/Data/Word_Embeddings/google_news.bin',
+                                                            binary=True)  # C binary format
         w2v = dict()
         for key in model.vocab.keys():
-            w2v[key]=model[key]
+            w2v[key] = model[key]
         pos_vecs = load_pickle('./tmp/amended_pos.p')
         neg_vecs = load_pickle('./tmp/amended_neg.p')
         for p in pos_vecs:
@@ -125,6 +126,27 @@ def load_embeddings(arg=None, filename='None'):
             w2v[n] = neg_vecs[n]
         print('Using amended word vectors.')
         return w2v
+
+    elif arg == 'amended_glove':
+        glove_path = '/home/hs/Data/Word_Embeddings/glove.840B.300d.txt'
+        model = dict()
+        with open(glove_path, 'r', newline='', encoding='utf-8') as f:
+            reader = csv.reader(f, quoting=csv.QUOTE_NONE, delimiter=' ')
+            for line in reader:
+                # print(line[0])
+                # split = line.split()
+                try:
+                    model[line[0]] = np.array(line[1:], dtype=float)
+                except:
+                    pass
+        pos_vecs = load_pickle('./tmp/amended_GloVe_pos.p')
+        neg_vecs = load_pickle('./tmp/amended_GloVe_neg.p')
+        for p in pos_vecs:
+            model[p] = pos_vecs[p]
+        for n in neg_vecs:
+            model[n] = neg_vecs[n]
+        print('Using amended word vectors.')
+        return model
 
     elif arg == 'CVAT':  # dim = 50
         model = gensim.models.Word2Vec.load(None)
@@ -268,11 +290,11 @@ def load_sst(path=None, level=None):
     # random.shuffle(t)
     # x_train, y_train = zip(*t)
     output = (x_train, y_train_valence, y_train_labels,
-               x_test, y_test_valence, y_test_labels,
-               x_valid, y_valid_valence, y_valid_labels,
-               x_train_polarity, y_train_polarity,
-               x_test_polarity, y_test_polarity,
-               x_valid_polarity, y_valid_polarity)
+              x_test, y_test_valence, y_test_labels,
+              x_valid, y_valid_valence, y_valid_labels,
+              x_train_polarity, y_train_polarity,
+              x_test_polarity, y_test_polarity,
+              x_valid_polarity, y_valid_polarity)
     dump_picle(output, filename)
     print('Data saved and load successfully.')
     return output
